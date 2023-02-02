@@ -1,5 +1,6 @@
 import "./style.css";
 import * as THREE from "three";
+import { Raycaster, Vector2 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Grid, {
   CELL_HEIGHT,
@@ -9,8 +10,7 @@ import Grid, {
 } from "./Grid";
 import Ground from "./Ground";
 import GroupOfBoxes from "./GroupOfBoxes";
-import Lights from "./Lights";
-import { Raycaster, Vector2 } from "three";
+import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
 
 const NUMERIC_OFFSET = 1e-3;
@@ -44,7 +44,14 @@ controls.update();
 
 const ground = new Ground();
 scene.add(ground);
-scene.add(new Lights());
+
+const dirlight = getDirLight();
+scene.add(dirlight);
+scene.add(dirlight.target);
+dirlight.position.set(0, 0, 100);
+dirlight.target.position.set(center.x, center.y, 0);
+
+scene.add(getAmbientLight());
 
 const grid = new Grid();
 const gridMesh = new GroupOfBoxes(grid);

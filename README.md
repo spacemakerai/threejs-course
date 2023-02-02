@@ -14,6 +14,7 @@
 - Search algo
 - Edges
 - Ground
+- Write efficient gridMesh
 
 
 
