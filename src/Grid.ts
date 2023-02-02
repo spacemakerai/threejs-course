@@ -31,4 +31,15 @@ export default class Grid {
   setCellValue(x: number, y: number, z: number, value: boolean): void {
     this.array[this.getIndex(x, y, z)] = value;
   }
+
+  encode() {
+    const bin = this.array.map((v) => (v ? "1" : "0")).join("");
+    return btoa(bin);
+  }
+  decode(b64: string) {
+    const bin = atob(b64);
+    for (let i = 0; i < bin.length; i++) {
+      this.array[i] = bin[i] === "1";
+    }
+  }
 }

@@ -96,7 +96,10 @@ function onClick(event: MouseEvent) {
 
     console.log(x, y, affectedZ, newVal);
     grid.setCellValue(x, y, affectedZ, newVal);
+    const encoded = grid.encode();
+    console.log(encoded);
     gridMesh.update();
+
     console.log(getAnalysisScore(grid));
   }
 }
