@@ -37,6 +37,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setClearColor(0xaaaaff, 1);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(center.x, center.y, 0);
@@ -60,8 +61,11 @@ scene.add(gridMesh);
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
-grid.setCellValue(5, 5, 3, true);
-gridMesh.update();
+const encoded = localStorage.getItem("encoded");
+if (encoded) {
+  grid.decode(encoded);
+  gridMesh.update();
+}
 
 function animate() {
   requestAnimationFrame(animate);
@@ -85,7 +89,6 @@ function onClick(event: MouseEvent) {
     // We only allow clicking on top faces
     if (closest.face!.normal.z < 0.99) return;
 
-    console.log(closest.point);
     const x = Math.floor((closest.point.x + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
     const y = Math.floor((closest.point.y + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
     const z = Math.floor((closest.point.z + NUMERIC_OFFSET) / CELL_HEIGHT);
@@ -94,13 +97,13 @@ function onClick(event: MouseEvent) {
 
     const affectedZ = event.shiftKey ? z - 1 : z;
 
-    console.log(x, y, affectedZ, newVal);
     grid.setCellValue(x, y, affectedZ, newVal);
     const encoded = grid.encode();
-    console.log(encoded);
+    localStorage.setItem("encoded", encoded);
+    //console.log(encoded);
     gridMesh.update();
 
-    console.log(getAnalysisScore(grid));
+    getAnalysisScore(grid);
   }
 }
 
