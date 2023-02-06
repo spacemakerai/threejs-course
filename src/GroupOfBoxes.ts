@@ -3,6 +3,8 @@ import {
   EdgesGeometry,
   FrontSide,
   Group,
+  LineBasicMaterial,
+  LineSegments,
   Mesh,
   MeshLambertMaterial,
 } from "three";
@@ -13,9 +15,13 @@ import Grid, {
   GRID_WIDTH,
 } from "./Grid";
 
-const BoxMaterial = new MeshLambertMaterial({
+const BOX_MATERIAL = new MeshLambertMaterial({
   shadowSide: FrontSide,
+  polygonOffset: true,
+  polygonOffsetFactor: 1,
 });
+
+const EDGES_MATERIAL = new LineBasicMaterial({ color: 0x444444 });
 
 export default class GroupOfBoxes extends Group {
   #grid: Grid;
@@ -43,9 +49,12 @@ export default class GroupOfBoxes extends Group {
           if (hasBox) {
             const box = new Mesh(
               new BoxGeometry(CELL_WIDTH_DEPTH, CELL_WIDTH_DEPTH, CELL_HEIGHT),
-              BoxMaterial
+              BOX_MATERIAL
             );
             const edges = new EdgesGeometry(box.geometry);
+            const line = new LineSegments(edges, EDGES_MATERIAL);
+            box.add(line);
+
             box.castShadow = true;
             box.receiveShadow = true;
             box.position.set(
