@@ -74,7 +74,7 @@ function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boole
 
 /**
  * Normalized device coordinate or NDC space is a screen independent display coordinate system;
- * it encompasses a square where the x and y components range from −1 to 1.
+ * it encompasses a square where the x and y components range from 0 to 1.
  *
   |⎻⎻⎻⎻1
   |    |
