@@ -1,7 +1,6 @@
 import "./style.css";
 import * as THREE from "three";
 import { Intersection, Raycaster, Vector2 } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH } from "./Grid";
 import Ground from "./Ground";
 import GroupOfBoxes from "./GroupOfBoxes";
@@ -11,6 +10,7 @@ import { State } from "./state";
 import { setupCamera } from "./camera";
 import { setupRenderer } from "./renderer";
 import { setupControls } from "./controls";
+import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 
 const NUMERIC_OFFSET = 1e-3;
 
@@ -43,14 +43,11 @@ function animate() {
 }
 animate();
 
-const mouse = new Vector2();
 const raycaster = new Raycaster();
 
-let mousedownEvent: MouseEvent | undefined;
 function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boolean {
   if (!down) return false;
   const distSq = (down.offsetX - up.offsetX) ** 2 + (down.offsetY - up.offsetY) ** 2;
-  console.log(distSq);
   return distSq > 4 ** 2;
 }
 
@@ -63,15 +60,9 @@ function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boole
   |    |
   0____|
  */
-function calculateNormalizedDeviceCoordinates(event: MouseEvent, canvas: HTMLCanvasElement) {
-  let x = (event.offsetX / canvas.clientWidth) * 2 - 1;
-  let y = -(event.offsetY / canvas.clientHeight) * 2 + 1;
-  return { x, y };
-}
 
-function findClosestClickedObject(x: number, y: number) {
-  mouse.set(x, y);
-  raycaster.setFromCamera(mouse, camera);
+function findClosestClickedObject(mousePosition: Vector2) {
+  raycaster.setFromCamera(mousePosition, camera);
   const intersections = raycaster.intersectObject(scene, true);
   const closestIntersection = intersections.length >= 1 ? intersections[0] : null;
   return closestIntersection;
@@ -94,7 +85,7 @@ function onmouseup(event: MouseEvent) {
 
   const normalizedCoordinates = calculateNormalizedDeviceCoordinates(event, canvas);
 
-  const closestIntersection = findClosestClickedObject(normalizedCoordinates.x, normalizedCoordinates.y);
+  const closestIntersection = findClosestClickedObject(normalizedCoordinates);
   if (!closestIntersection) return;
 
   if (!closestIntersection.face) return; // We only allow clicking on top faces
@@ -119,5 +110,6 @@ function onmousedown(event: MouseEvent) {
   mousedownEvent = event;
 }
 
+let mousedownEvent: MouseEvent | undefined;
 window.addEventListener("mouseup", onmouseup);
 window.addEventListener("mousedown", onmousedown);
