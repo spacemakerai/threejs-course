@@ -47,11 +47,11 @@ export default class Grid {
         }
       }
     }
-    return JSON.stringify(positions);
+    return btoa(JSON.stringify(positions));
   }
   decode(encoded: string) {
     this.empty();
-    const positions = JSON.parse(encoded) as [number, number, number][];
+    const positions = JSON.parse(atob(encoded)) as [number, number, number][];
     for (let [x, y, z] of positions) {
       this.setCellValue(x, y, z, true);
     }

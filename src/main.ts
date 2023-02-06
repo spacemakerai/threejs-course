@@ -48,7 +48,7 @@ scene.add(gridMesh);
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
-const encoded = localStorage.getItem("encoded");
+const encoded = new URLSearchParams(window.location.search).get("gridState");
 if (encoded) {
   console.log(encoded);
   grid.decode(encoded);
@@ -121,11 +121,17 @@ function onmouseup(event: MouseEvent) {
   const affectedZ = event.shiftKey ? z - 1 : z;
 
   grid.setCellValue(x, y, affectedZ, newVal);
-  const encoded = grid.encode();
-  localStorage.setItem("encoded", encoded);
+  updateUrlWithState(grid);
   gridMesh.update();
 
   getAnalysisScore(grid);
+}
+
+function updateUrlWithState(grid: Grid): void {
+  const searchParams = new URLSearchParams(window.location.search);
+  searchParams.set("gridState", grid.encode());
+  const newRelativePathQuery = window.location.pathname + "?" + searchParams.toString();
+  history.pushState(null, "", newRelativePathQuery);
 }
 
 function onmousedown(event: MouseEvent) {
