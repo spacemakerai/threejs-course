@@ -76,7 +76,23 @@ animate();
 const mouse = new Vector2();
 const raycaster = new Raycaster();
 
-function onClick(event: MouseEvent) {
+let mousedownEvent: MouseEvent | undefined;
+function movedWhileClicking(
+  down: MouseEvent | undefined,
+  up: MouseEvent
+): boolean {
+  if (!down) return false;
+  const distSq =
+    (down.offsetX - up.offsetX) ** 2 + (down.offsetY - up.offsetY) ** 2;
+  console.log(distSq);
+  return distSq > 4 ** 2;
+}
+
+function onmouseup(event: MouseEvent) {
+  if (movedWhileClicking(mousedownEvent, event)) {
+    return;
+  }
+
   let x = (event.offsetX / canvas.clientWidth) * 2 - 1;
   let y = -(event.offsetY / canvas.clientHeight) * 2 + 1;
   mouse.set(x, y);
@@ -100,11 +116,16 @@ function onClick(event: MouseEvent) {
     grid.setCellValue(x, y, affectedZ, newVal);
     const encoded = grid.encode();
     localStorage.setItem("encoded", encoded);
-    //console.log(encoded);
+    console.log(encoded);
     gridMesh.update();
 
     getAnalysisScore(grid);
   }
 }
 
-window.addEventListener("click", onClick);
+function onmousedown(event: MouseEvent) {
+  mousedownEvent = event;
+}
+
+window.addEventListener("mouseup", onmouseup);
+window.addEventListener("mousedown", onmousedown);
