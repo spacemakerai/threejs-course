@@ -16,6 +16,7 @@ import Grid, {
 } from "./Grid";
 
 const BOX_MATERIAL = new MeshLambertMaterial({
+  side: FrontSide,
   shadowSide: FrontSide,
   polygonOffset: true,
   polygonOffsetFactor: 1,
