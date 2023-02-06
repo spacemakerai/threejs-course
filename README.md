@@ -1,10 +1,8 @@
 # TODOs
 
-- Fix shadows
 - Make analysis
   - sensible score
   - turn on/off
-- Make grid to hexstring encode/decode
 - Clean up rendering/camera
 - Make basic example
   - Built in geometry
@@ -13,9 +11,9 @@
 - Find the flow
 - Search algo
 - Edges
-- Ground
-- Write efficient gridMesh
 
+- Write efficient gridMesh
+- Rewrite grid to be x * y * height
 
 
 ### Outline

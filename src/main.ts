@@ -7,6 +7,7 @@ import Ground from "./Ground";
 import GroupOfBoxes from "./GroupOfBoxes";
 import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
+import { SimulatedAnnealing } from "./optimize/simulatedAnnealing";
 
 const NUMERIC_OFFSET = 1e-3;
 
@@ -95,9 +96,15 @@ function findClosestClickedObject(x: number, y: number) {
   return closestIntersection;
 }
 
-function isTopFace(closestIntersection: Intersection<Object3D>) {
-  return !(closestIntersection.face && closestIntersection.face.normal.z < 0.99);
+function isTopFace(closestIntersection: Intersection) {
+  return closestIntersection.face && closestIntersection.face.normal.z > 0.99;
 }
+
+// const sa = new SimulatedAnnealing(new Grid());
+// sa.run();
+//
+// grid.decode(sa.grid.encode());
+// gridMesh.update();
 
 function onmouseup(event: MouseEvent) {
   if (movedWhileClicking(mousedownEvent, event)) {
@@ -109,7 +116,7 @@ function onmouseup(event: MouseEvent) {
   const closestIntersection = findClosestClickedObject(normalizedCoordinates.x, normalizedCoordinates.y);
   if (!closestIntersection) return;
 
-  // We only allow clicking on top faces
+  if (!closestIntersection.face) return; // We only allow clicking on top faces
   if (!isTopFace(closestIntersection)) return;
 
   const x = Math.floor((closestIntersection.point.x + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
@@ -124,7 +131,7 @@ function onmouseup(event: MouseEvent) {
   updateUrlWithState(grid);
   gridMesh.update();
 
-  getAnalysisScore(grid);
+  console.log(getAnalysisScore(grid));
 }
 
 function updateUrlWithState(grid: Grid): void {

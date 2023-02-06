@@ -1,8 +1,8 @@
 export const CELL_WIDTH_DEPTH = 6;
 export const CELL_HEIGHT = 3;
 
-export const GRID_WIDTH = 10;
-export const GRID_DEPTH = 10;
+export const GRID_WIDTH = 30;
+export const GRID_DEPTH = 30;
 export const GRID_HEIGHT = 5;
 
 export default class Grid {
@@ -55,5 +55,11 @@ export default class Grid {
     for (let [x, y, z] of positions) {
       this.setCellValue(x, y, z, true);
     }
+  }
+
+  clone() {
+    const cloned = new Grid();
+    cloned.array = [...this.array];
+    return cloned;
   }
 }
