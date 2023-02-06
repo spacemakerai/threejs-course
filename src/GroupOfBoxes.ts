@@ -1,19 +1,5 @@
-import {
-  BoxGeometry,
-  EdgesGeometry,
-  FrontSide,
-  Group,
-  LineBasicMaterial,
-  LineSegments,
-  Mesh,
-  MeshLambertMaterial,
-} from "three";
-import Grid, {
-  CELL_HEIGHT,
-  CELL_WIDTH_DEPTH,
-  GRID_HEIGHT,
-  GRID_WIDTH,
-} from "./Grid";
+import { BoxGeometry, EdgesGeometry, FrontSide, Group, LineBasicMaterial, LineSegments, Mesh, MeshLambertMaterial } from "three";
+import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_HEIGHT, GRID_WIDTH } from "./Grid";
 
 const BOX_MATERIAL = new MeshLambertMaterial({
   side: FrontSide,
@@ -48,10 +34,7 @@ export default class GroupOfBoxes extends Group {
         for (let z = 0; z < GRID_HEIGHT; z++) {
           const hasBox = this.#grid.getCellValue(x, y, z);
           if (hasBox) {
-            const box = new Mesh(
-              new BoxGeometry(CELL_WIDTH_DEPTH, CELL_WIDTH_DEPTH, CELL_HEIGHT),
-              BOX_MATERIAL
-            );
+            const box = new Mesh(new BoxGeometry(CELL_WIDTH_DEPTH, CELL_WIDTH_DEPTH, CELL_HEIGHT), BOX_MATERIAL);
             const edges = new EdgesGeometry(box.geometry);
             const line = new LineSegments(edges, EDGES_MATERIAL);
             box.add(line);

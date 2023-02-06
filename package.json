@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "prettier": {
-    "printWidth": 80
+    "printWidth": 140
   },
   "scripts": {
     "dev": "vite",

@@ -2,12 +2,7 @@ import "./style.css";
 import * as THREE from "three";
 import { Intersection, Object3D, Raycaster, Vector2 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Grid, {
-  CELL_HEIGHT,
-  CELL_WIDTH_DEPTH,
-  GRID_DEPTH,
-  GRID_WIDTH,
-} from "./Grid";
+import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
 import Ground from "./Ground";
 import GroupOfBoxes from "./GroupOfBoxes";
 import { getAmbientLight, getDirLight } from "./Lights";
@@ -15,18 +10,10 @@ import { getAnalysisScore } from "./analysis";
 
 const NUMERIC_OFFSET = 1e-3;
 
-export const center = new Vector2(
-  (GRID_WIDTH * CELL_WIDTH_DEPTH) / 2,
-  (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2
-);
+export const center = new Vector2((GRID_WIDTH * CELL_WIDTH_DEPTH) / 2, (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 camera.up.set(0, 0, 1);
 camera.position.set(center.x, center.y - 30, 30);
@@ -78,13 +65,9 @@ const mouse = new Vector2();
 const raycaster = new Raycaster();
 
 let mousedownEvent: MouseEvent | undefined;
-function movedWhileClicking(
-  down: MouseEvent | undefined,
-  up: MouseEvent
-): boolean {
+function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boolean {
   if (!down) return false;
-  const distSq =
-    (down.offsetX - up.offsetX) ** 2 + (down.offsetY - up.offsetY) ** 2;
+  const distSq = (down.offsetX - up.offsetX) ** 2 + (down.offsetY - up.offsetY) ** 2;
   console.log(distSq);
   return distSq > 4 ** 2;
 }
@@ -108,15 +91,12 @@ function findClosestClickedObject(x: number, y: number) {
   mouse.set(x, y);
   raycaster.setFromCamera(mouse, camera);
   const intersections = raycaster.intersectObject(scene, true);
-  const closestIntersection =
-    intersections.length >= 1 ? intersections[0] : null;
+  const closestIntersection = intersections.length >= 1 ? intersections[0] : null;
   return closestIntersection;
 }
 
 function isTopFace(closestIntersection: Intersection<Object3D>) {
-  return !(
-    closestIntersection.face && closestIntersection.face.normal.z < 0.99
-  );
+  return !(closestIntersection.face && closestIntersection.face.normal.z < 0.99);
 }
 
 function onmouseup(event: MouseEvent) {
@@ -126,24 +106,15 @@ function onmouseup(event: MouseEvent) {
 
   const normalizedCoordinates = calculateNormalizedDeviceCoordinates(event);
 
-  const closestIntersection = findClosestClickedObject(
-    normalizedCoordinates.x,
-    normalizedCoordinates.y
-  );
+  const closestIntersection = findClosestClickedObject(normalizedCoordinates.x, normalizedCoordinates.y);
   if (!closestIntersection) return;
 
   // We only allow clicking on top faces
   if (!isTopFace(closestIntersection)) return;
 
-  const x = Math.floor(
-    (closestIntersection.point.x + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH
-  );
-  const y = Math.floor(
-    (closestIntersection.point.y + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH
-  );
-  const z = Math.floor(
-    (closestIntersection.point.z + NUMERIC_OFFSET) / CELL_HEIGHT
-  );
+  const x = Math.floor((closestIntersection.point.x + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
+  const y = Math.floor((closestIntersection.point.y + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
+  const z = Math.floor((closestIntersection.point.z + NUMERIC_OFFSET) / CELL_HEIGHT);
 
   const newVal = !event.shiftKey;
 

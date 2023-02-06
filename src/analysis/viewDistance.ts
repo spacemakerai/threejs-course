@@ -37,8 +37,5 @@ export function calculateViewDistance(grid: Grid): number {
     }
   }
 
-  return (
-    scores.map((s) => Math.min(s, MAX) / MAX).reduce((a, b) => a + b, 0) /
-    scores.length
-  );
+  return scores.map((s) => Math.min(s, MAX) / MAX).reduce((a, b) => a + b, 0) / scores.length;
 }
