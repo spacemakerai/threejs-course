@@ -1,5 +1,5 @@
 import { AmbientLight, DirectionalLight } from "three";
-import { CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
+import Grid, { CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
 
 export function getDirLight() {
   const dirLight = new DirectionalLight(0xffffff, 0.7);
@@ -13,6 +13,9 @@ export function getDirLight() {
   dirLight.shadow.camera.far = 2000;
 
   dirLight.shadow.normalBias = 0.5;
+
+  dirLight.position.set(0, 0, 100);
+  dirLight.target.position.set(Grid.center.x, Grid.center.y, 0);
 
   return dirLight;
 }
