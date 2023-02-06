@@ -1,13 +1,13 @@
 import "./style.css";
 import * as THREE from "three";
-import { Intersection, Object3D, Raycaster, Vector2 } from "three";
+import { Intersection, Raycaster, Vector2 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
 import Ground from "./Ground";
 import GroupOfBoxes from "./GroupOfBoxes";
 import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
-import { SimulatedAnnealing } from "./optimize/simulatedAnnealing";
+import { State } from "./state";
 
 const NUMERIC_OFFSET = 1e-3;
 
@@ -42,19 +42,12 @@ dirlight.target.position.set(center.x, center.y, 0);
 
 scene.add(getAmbientLight());
 
-const grid = new Grid();
+const grid = State.load() || new Grid();
 const gridMesh = new GroupOfBoxes(grid);
 scene.add(gridMesh);
 
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
-
-const encoded = new URLSearchParams(window.location.search).get("gridState");
-if (encoded) {
-  console.log(encoded);
-  grid.decode(encoded);
-  gridMesh.update();
-}
 
 function animate() {
   requestAnimationFrame(animate);
@@ -128,17 +121,10 @@ function onmouseup(event: MouseEvent) {
   const affectedZ = event.shiftKey ? z - 1 : z;
 
   grid.setCellValue(x, y, affectedZ, newVal);
-  updateUrlWithState(grid);
+  State.save(grid);
   gridMesh.update();
 
   console.log(getAnalysisScore(grid));
-}
-
-function updateUrlWithState(grid: Grid): void {
-  const searchParams = new URLSearchParams(window.location.search);
-  searchParams.set("gridState", grid.encode());
-  const newRelativePathQuery = window.location.pathname + "?" + searchParams.toString();
-  history.pushState(null, "", newRelativePathQuery);
 }
 
 function onmousedown(event: MouseEvent) {
