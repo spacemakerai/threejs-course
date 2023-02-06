@@ -32,7 +32,7 @@ export default class GroupOfBoxes extends Group {
     for (let x = 0; x < GRID_WIDTH; x++) {
       for (let y = 0; y < GRID_WIDTH; y++) {
         for (let z = 0; z < GRID_HEIGHT; z++) {
-          const hasBox = this.#grid.getCellValue(x, y, z);
+          const hasBox = this.#grid.getCellValue(x, y) >= z + 1;
           if (hasBox) {
             const box = new Mesh(new BoxGeometry(CELL_WIDTH_DEPTH, CELL_WIDTH_DEPTH, CELL_HEIGHT), BOX_MATERIAL);
             const edges = new EdgesGeometry(box.geometry);

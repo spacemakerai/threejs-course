@@ -6,60 +6,50 @@ export const GRID_DEPTH = 30;
 export const GRID_HEIGHT = 5;
 
 export default class Grid {
-  array: boolean[] = [];
+  array: number[][] = [];
 
   constructor() {
     this.empty();
   }
 
   empty() {
-    for (let x = 0; x < GRID_WIDTH; x++) {
-      for (let y = 0; y < GRID_DEPTH; y++) {
-        for (let z = 0; z < GRID_HEIGHT; z++) {
-          this.setCellValue(x, y, z, false);
-          // this.array[this.getIndex(x, y, z)] =
-          //   Math.random() < 1 - z / GRID_HEIGHT;
-        }
-      }
-    }
+    this.array = Array.from(Array(GRID_WIDTH)).map((_) => Array.from(Array(GRID_DEPTH)).map((_) => 0));
   }
 
-  getIndex(x: number, y: number, z: number): number {
-    return x * GRID_DEPTH * GRID_HEIGHT + y * GRID_HEIGHT + z;
+  addOne(x: number, y: number) {
+    const currentVal = this.array[x][y];
+    let newVal = currentVal + 1;
+    newVal = Math.min(newVal, GRID_HEIGHT);
+    newVal = Math.max(newVal, 0);
+    this.array[x][y] = newVal;
   }
 
-  getCellValue(x: number, y: number, z: number): boolean {
-    return this.array[this.getIndex(x, y, z)];
+  subtractOne(x: number, y: number) {
+    const currentVal = this.array[x][y];
+    let newVal = currentVal - 1;
+    newVal = Math.min(newVal, GRID_HEIGHT);
+    newVal = Math.max(newVal, 0);
+    this.array[x][y] = newVal;
   }
 
-  setCellValue(x: number, y: number, z: number, value: boolean): void {
-    this.array[this.getIndex(x, y, z)] = value;
+  getCellValue(x: number, y: number): number {
+    return this.array[x][y];
+  }
+
+  setCellValue(x: number, y: number, height: number): void {
+    this.array[x][y] = height;
   }
 
   encode() {
-    const positions: [number, number, number][] = [];
-    for (let x = 0; x < GRID_WIDTH; x++) {
-      for (let y = 0; y < GRID_DEPTH; y++) {
-        for (let z = 0; z < GRID_HEIGHT; z++) {
-          if (this.getCellValue(x, y, z)) {
-            positions.push([x, y, z]);
-          }
-        }
-      }
-    }
-    return btoa(JSON.stringify(positions));
+    return btoa(JSON.stringify(this.array));
   }
   decode(encoded: string) {
-    this.empty();
-    const positions = JSON.parse(atob(encoded)) as [number, number, number][];
-    for (let [x, y, z] of positions) {
-      this.setCellValue(x, y, z, true);
-    }
+    this.array = JSON.parse(atob(encoded));
   }
 
   clone() {
     const cloned = new Grid();
-    cloned.array = [...this.array];
+    cloned.array = JSON.parse(JSON.stringify(this.array));
     return cloned;
   }
 }

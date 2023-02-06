@@ -1,15 +1,13 @@
 import "./style.css";
 import * as THREE from "three";
-import { Intersection, Object3D, Raycaster, Vector2 } from "three";
+import { Intersection, Raycaster, Vector2 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
+import Grid, { CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
 import Ground from "./Ground";
 import GroupOfBoxes from "./GroupOfBoxes";
 import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
 import { SimulatedAnnealing } from "./optimize/simulatedAnnealing";
-
-const NUMERIC_OFFSET = 1e-3;
 
 export const center = new Vector2((GRID_WIDTH * CELL_WIDTH_DEPTH) / 2, (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2);
 
@@ -119,15 +117,14 @@ function onmouseup(event: MouseEvent) {
   if (!closestIntersection.face) return; // We only allow clicking on top faces
   if (!isTopFace(closestIntersection)) return;
 
-  const x = Math.floor((closestIntersection.point.x + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
-  const y = Math.floor((closestIntersection.point.y + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
-  const z = Math.floor((closestIntersection.point.z + NUMERIC_OFFSET) / CELL_HEIGHT);
+  const x = Math.floor(closestIntersection.point.x / CELL_WIDTH_DEPTH);
+  const y = Math.floor(closestIntersection.point.y / CELL_WIDTH_DEPTH);
 
-  const newVal = !event.shiftKey;
+  const diff = event.shiftKey ? -1 : 1;
+  const prevVal = grid.getCellValue(x, y);
+  const newVal = prevVal + diff;
 
-  const affectedZ = event.shiftKey ? z - 1 : z;
-
-  grid.setCellValue(x, y, affectedZ, newVal);
+  grid.setCellValue(x, y, newVal);
   updateUrlWithState(grid);
   gridMesh.update();
 
@@ -147,3 +144,10 @@ function onmousedown(event: MouseEvent) {
 
 window.addEventListener("mouseup", onmouseup);
 window.addEventListener("mousedown", onmousedown);
+
+document.getElementById("search")?.addEventListener("click", () => {
+  const sa = new SimulatedAnnealing(new Grid());
+  sa.run(10_000);
+  grid.decode(sa.grid.encode());
+  gridMesh.update();
+});

@@ -16,7 +16,7 @@ export function getOutdoorAreaScore(grid: Grid) {
         [x, y + 1],
         [x + 1, y + 1],
       ];
-      if (!cells.some(([x, y]) => grid.getCellValue(x, y, 0))) {
+      if (!cells.some(([x, y]) => grid.getCellValue(x, y) > 0)) {
         sum++;
       }
     }
@@ -29,7 +29,7 @@ export function getOutdoorAreaSimple(grid: Grid) {
   let sum = 0;
   for (let x = 0; x < GRID_WIDTH; x++) {
     for (let y = 0; y < GRID_DEPTH; y++) {
-      if (!grid.getCellValue(x, y, 0)) {
+      if (grid.getCellValue(x, y) === 0) {
         sum++;
       }
     }

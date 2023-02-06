@@ -1,10 +1,8 @@
-import Grid, { GRID_DEPTH, GRID_HEIGHT, GRID_WIDTH } from "../Grid";
+import Grid, { GRID_DEPTH, GRID_WIDTH } from "../Grid";
 import { getAnalysisScore } from "../analysis";
 
 export class SimulatedAnnealing {
   grid: Grid;
-
-  MAX_ITER = 1_000;
 
   constructor(grid: Grid) {
     this.grid = grid;
@@ -14,31 +12,23 @@ export class SimulatedAnnealing {
     const cloned = this.grid.clone();
     const x = getRandomInt(0, GRID_WIDTH);
     const y = getRandomInt(0, GRID_DEPTH);
-    const z = getRandomInt(0, GRID_HEIGHT);
 
-    const currentVal = cloned.getCellValue(x, y, z);
-    if (!currentVal) {
-      const below = z === 0 || cloned.getCellValue(x, y, z - 1);
-      if (below) {
-        cloned.setCellValue(x, y, z, true);
-      }
+    if (Math.random() < 0.7) {
+      cloned.addOne(x, y);
     } else {
-      if (!cloned.getCellValue(x, y, z + 1)) {
-        cloned.setCellValue(x, y, z, false);
-      }
+      cloned.subtractOne(x, y);
     }
-
     return cloned;
   }
 
-  run() {
-    for (let i = 0; i < this.MAX_ITER; i++) {
+  run(MAX_ITER: number = 1_000) {
+    for (let i = 0; i < MAX_ITER; i++) {
       const neigbour = this.getNeighbour();
 
       const oldScore = getAnalysisScore(this.grid);
       const newScore = getAnalysisScore(neigbour);
 
-      if (i % (this.MAX_ITER / 10) === 0) {
+      if (i % (MAX_ITER / 10) === 0) {
         console.log(i, oldScore);
       }
 
