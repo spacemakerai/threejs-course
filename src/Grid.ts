@@ -9,10 +9,14 @@ export default class Grid {
   array: boolean[] = [];
 
   constructor() {
+    this.empty();
+  }
+
+  empty() {
     for (let x = 0; x < GRID_WIDTH; x++) {
       for (let y = 0; y < GRID_DEPTH; y++) {
         for (let z = 0; z < GRID_HEIGHT; z++) {
-          this.array[this.getIndex(x, y, z)] = false;
+          this.setCellValue(x, y, z, false);
           // this.array[this.getIndex(x, y, z)] =
           //   Math.random() < 1 - z / GRID_HEIGHT;
         }
@@ -33,13 +37,23 @@ export default class Grid {
   }
 
   encode() {
-    const bin = this.array.map((v) => (v ? "1" : "0")).join("");
-    return btoa(bin);
+    const positions: [number, number, number][] = [];
+    for (let x = 0; x < GRID_WIDTH; x++) {
+      for (let y = 0; y < GRID_DEPTH; y++) {
+        for (let z = 0; z < GRID_HEIGHT; z++) {
+          if (this.getCellValue(x, y, z)) {
+            positions.push([x, y, z]);
+          }
+        }
+      }
+    }
+    return JSON.stringify(positions);
   }
-  decode(b64: string) {
-    const bin = atob(b64);
-    for (let i = 0; i < bin.length; i++) {
-      this.array[i] = bin[i] === "1";
+  decode(encoded: string) {
+    this.empty();
+    const positions = JSON.parse(encoded) as [number, number, number][];
+    for (let [x, y, z] of positions) {
+      this.setCellValue(x, y, z, true);
     }
   }
 }

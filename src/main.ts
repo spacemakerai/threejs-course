@@ -63,6 +63,7 @@ scene.add(axesHelper);
 
 const encoded = localStorage.getItem("encoded");
 if (encoded) {
+  console.log(encoded);
   grid.decode(encoded);
   gridMesh.update();
 }
@@ -116,7 +117,6 @@ function onmouseup(event: MouseEvent) {
     grid.setCellValue(x, y, affectedZ, newVal);
     const encoded = grid.encode();
     localStorage.setItem("encoded", encoded);
-    console.log(encoded);
     gridMesh.update();
 
     getAnalysisScore(grid);
