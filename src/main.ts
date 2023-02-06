@@ -1,6 +1,5 @@
 import "./style.css";
 import * as THREE from "three";
-import { Intersection, Raycaster, Vector2 } from "three";
 import Grid, { CELL_WIDTH_DEPTH } from "./Grid";
 import Ground from "./Ground";
 import GroupOfBoxes from "./GroupOfBoxes";
@@ -12,6 +11,9 @@ import { setupRenderer } from "./renderer";
 import { setupControls } from "./controls";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 import { SimulatedAnnealing } from "./optimize/simulatedAnnealing";
+import { findClosestClickedObject } from "./raycasting";
+
+const NUMERIC_OFFSET = 1e-3;
 
 const scene = new THREE.Scene();
 const camera = setupCamera();
@@ -42,33 +44,10 @@ function animate() {
 }
 animate();
 
-const raycaster = new Raycaster();
-
 function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boolean {
   if (!down) return false;
   const distSq = (down.offsetX - up.offsetX) ** 2 + (down.offsetY - up.offsetY) ** 2;
   return distSq > 4 ** 2;
-}
-
-/**
- * Normalized device coordinate or NDC space is a screen independent display coordinate system;
- * it encompasses a square where the x and y components range from 0 to 1.
- *
-  |⎻⎻⎻⎻1
-  |    |
-  |    |
-  0____|
- */
-
-function findClosestClickedObject(mousePosition: Vector2) {
-  raycaster.setFromCamera(mousePosition, camera);
-  const intersections = raycaster.intersectObject(scene, true);
-  const closestIntersection = intersections.length >= 1 ? intersections[0] : null;
-  return closestIntersection;
-}
-
-function isTopFace(closestIntersection: Intersection) {
-  return closestIntersection.face && closestIntersection.face.normal.z > 0.99;
 }
 
 // const sa = new SimulatedAnnealing(new Grid());
@@ -79,16 +58,12 @@ function isTopFace(closestIntersection: Intersection) {
 
 function onmouseup(event: MouseEvent) {
   if (movedWhileClicking(mousedownEvent, event)) {
+    //We don't want to add apartments if the user only wanted to move the camera
     return;
   }
-
   const normalizedCoordinates = calculateNormalizedDeviceCoordinates(event, canvas);
-
-  const closestIntersection = findClosestClickedObject(normalizedCoordinates);
+  const closestIntersection = findClosestClickedObject(normalizedCoordinates, scene, camera);
   if (!closestIntersection) return;
-
-  if (!closestIntersection.face) return; // We only allow clicking on top faces
-  if (!isTopFace(closestIntersection)) return;
 
   const x = Math.floor(closestIntersection.point.x / CELL_WIDTH_DEPTH);
   const y = Math.floor(closestIntersection.point.y / CELL_WIDTH_DEPTH);
