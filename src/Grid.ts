@@ -1,3 +1,5 @@
+import { Vector2 } from "three";
+
 export const CELL_WIDTH_DEPTH = 6;
 export const CELL_HEIGHT = 3;
 
@@ -7,6 +9,7 @@ export const GRID_HEIGHT = 5;
 
 export default class Grid {
   array: boolean[] = [];
+  static center = new Vector2((GRID_WIDTH * CELL_WIDTH_DEPTH) / 2, (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2);
 
   constructor() {
     this.empty();

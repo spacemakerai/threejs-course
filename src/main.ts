@@ -2,34 +2,25 @@ import "./style.css";
 import * as THREE from "three";
 import { Intersection, Raycaster, Vector2 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
+import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH } from "./Grid";
 import Ground from "./Ground";
 import GroupOfBoxes from "./GroupOfBoxes";
 import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
 import { State } from "./state";
+import { setupCamera } from "./camera";
+import { setupRenderer } from "./renderer";
+import { setupControls } from "./controls";
 
 const NUMERIC_OFFSET = 1e-3;
 
-export const center = new Vector2((GRID_WIDTH * CELL_WIDTH_DEPTH) / 2, (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2);
-
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = setupCamera();
+const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasElement;
 
-camera.up.set(0, 0, 1);
-camera.position.set(center.x, center.y - 30, 30);
+const renderer = setupRenderer(canvas);
 
-const canvas = document.getElementById("app")!;
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.setClearColor(0xaaaaff, 1);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(center.x, center.y, 0);
-controls.update();
+setupControls(camera, renderer);
 
 const ground = new Ground();
 scene.add(ground);
@@ -37,9 +28,6 @@ scene.add(ground);
 const dirlight = getDirLight();
 scene.add(dirlight);
 scene.add(dirlight.target);
-dirlight.position.set(0, 0, 100);
-dirlight.target.position.set(center.x, center.y, 0);
-
 scene.add(getAmbientLight());
 
 const grid = State.load() || new Grid();
@@ -75,7 +63,7 @@ function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boole
   |    |
   0____|
  */
-function calculateNormalizedDeviceCoordinates(event: MouseEvent) {
+function calculateNormalizedDeviceCoordinates(event: MouseEvent, canvas: HTMLCanvasElement) {
   let x = (event.offsetX / canvas.clientWidth) * 2 - 1;
   let y = -(event.offsetY / canvas.clientHeight) * 2 + 1;
   return { x, y };
@@ -104,7 +92,7 @@ function onmouseup(event: MouseEvent) {
     return;
   }
 
-  const normalizedCoordinates = calculateNormalizedDeviceCoordinates(event);
+  const normalizedCoordinates = calculateNormalizedDeviceCoordinates(event, canvas);
 
   const closestIntersection = findClosestClickedObject(normalizedCoordinates.x, normalizedCoordinates.y);
   if (!closestIntersection) return;
