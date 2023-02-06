@@ -12,6 +12,7 @@ import { setupControls } from "./controls";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 import { SimulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { findClosestClickedObject } from "./raycasting";
+import { Vector3 } from "three";
 
 const NUMERIC_OFFSET = 1e-3;
 
@@ -64,9 +65,7 @@ function onmouseup(event: MouseEvent) {
   const normalizedCoordinates = calculateNormalizedDeviceCoordinates(event, canvas);
   const closestIntersection = findClosestClickedObject(normalizedCoordinates, scene, camera);
   if (!closestIntersection) return;
-
-  const x = Math.floor(closestIntersection.point.x / CELL_WIDTH_DEPTH);
-  const y = Math.floor(closestIntersection.point.y / CELL_WIDTH_DEPTH);
+  const { x, y } = screenToGridCoordinates(closestIntersection.point);
 
   const diff = event.shiftKey ? -1 : 1;
   const prevVal = grid.getCellValue(x, y);
@@ -77,6 +76,13 @@ function onmouseup(event: MouseEvent) {
   gridMesh.update();
 
   console.log(getAnalysisScore(grid));
+}
+
+function screenToGridCoordinates(screenCoordinates: Vector3) {
+  const x = Math.floor((screenCoordinates.x + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
+  const y = Math.floor((screenCoordinates.y + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
+  const z = Math.floor((screenCoordinates.z + NUMERIC_OFFSET) / CELL_HEIGHT);
+  return { x, y, z };
 }
 
 function onmousedown(event: MouseEvent) {
