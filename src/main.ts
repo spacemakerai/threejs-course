@@ -189,7 +189,7 @@ scene.add(ambientLight);
  */
 
 const groundGeometry = new PlaneGeometry(GRID_WIDTH * CELL_WIDTH_DEPTH, GRID_DEPTH * CELL_WIDTH_DEPTH);
-const groundMaterial = new MeshLambertMaterial();
+const groundMaterial = new MeshLambertMaterial({ color: 0xaaaaaa });
 const groundMesh = new Mesh(groundGeometry, groundMaterial);
 groundMesh.position.set((GRID_WIDTH * CELL_WIDTH_DEPTH) / 2, (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2, 0);
 scene.add(groundMesh);
@@ -261,9 +261,9 @@ function onmouseup(event: MouseEvent) {
   State.save(grid);
   gridMesh.update(grid);
 
-  calculateViewDistance(grid, true);
+  //calculateViewDistance(grid, true);
 
-  console.log(getAnalysisScore(grid));
+  //console.log(getAnalysisScore(grid));
 }
 
 function screenToGridCoordinates(screenCoordinates: Vector3) {
