@@ -2,6 +2,8 @@ import Grid, { GRID_DEPTH, GRID_WIDTH } from "../Grid";
 
 export function getOutdoorAreaScore(grid: Grid) {
   const maxScore = GRID_WIDTH * GRID_DEPTH;
+  const targetScore = maxScore / 3;
+
   let sum = 0;
   for (let x = 1; x < GRID_WIDTH - 1; x++) {
     for (let y = 1; y < GRID_DEPTH - 1; y++) {
@@ -21,7 +23,7 @@ export function getOutdoorAreaScore(grid: Grid) {
       }
     }
   }
-  return sum / maxScore;
+  return Math.min(sum, targetScore) / targetScore;
 }
 
 export function getOutdoorAreaSimple(grid: Grid) {

@@ -1,19 +1,27 @@
 import Grid from "../Grid";
-import { getOutdoorAreaScore, getOutdoorAreaSimple } from "./outdoorArea";
+import { getOutdoorAreaSimple } from "./outdoorArea";
 import { calculateViewDistance } from "./viewDistance";
 import { calculateApartmentCount } from "./sellableApartments";
 
-export function getAnalysisScore(grid: Grid, print: boolean = false): number {
-  const scores = {
-    outdoor1: getOutdoorAreaScore(grid),
-    outdoor2: getOutdoorAreaSimple(grid),
+type AnalysisResult = {
+  outdoor: number;
+  view: number;
+  sellableApartments: number;
+};
+
+export function getAnalysisScore(grid: Grid) {
+  const result = runAnalysis(grid);
+  return evaluate(result);
+}
+
+function evaluate(result: AnalysisResult) {
+  return (result.view + result.sellableApartments + result.outdoor) / 3;
+}
+
+export function runAnalysis(grid: Grid): AnalysisResult {
+  return {
+    outdoor: getOutdoorAreaSimple(grid), //getOutdoorAreaScore(grid)
     view: calculateViewDistance(grid),
     sellableApartments: calculateApartmentCount(grid),
   };
-  if (print) {
-    console.log(scores);
-  }
-
-  const score = [scores.outdoor1 / 2, scores.view, scores.sellableApartments];
-  return score.reduce((a, b) => a + b, 0) / score.length;
 }

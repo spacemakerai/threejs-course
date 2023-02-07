@@ -13,11 +13,13 @@ export default class GridMesh extends Group implements IGridMesh {
   mesh: Mesh;
   lineSegments: LineSegments;
 
-  constructor() {
+  constructor(grid: Grid) {
     super();
     this.mesh = new Mesh(new BufferGeometry(), BOX_MATERIAL);
     this.lineSegments = new LineSegments(new BufferGeometry(), EDGES_MATERIAL);
     this.add(this.mesh, this.lineSegments);
+
+    this.update(grid);
   }
 
   update(grid: Grid) {
@@ -49,8 +51,6 @@ export default class GridMesh extends Group implements IGridMesh {
 
     this.lineSegments.geometry.setAttribute("position", new BufferAttribute(new Float32Array(lineSegmentsPositions.flat()), 3));
     this.lineSegments.geometry.attributes.position.needsUpdate = true;
-
-    console.log("Update done");
   }
 }
 

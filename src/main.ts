@@ -3,7 +3,6 @@ import * as THREE from "three";
 import {
   AmbientLight,
   DirectionalLight,
-  DirectionalLightHelper,
   Mesh,
   MeshLambertMaterial,
   PerspectiveCamera,
@@ -13,18 +12,15 @@ import {
   WebGLRenderer,
 } from "three";
 import Grid, { CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
-import Ground from "./Ground";
-import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
 import { State } from "./state";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 
 import { findClosestClickedObject } from "./raycasting";
 import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
-import { IGridMesh } from "./GridMesh/GridMesh";
 import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
-import { calculateViewDistance } from "./analysis/viewDistance";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import GridMesh from "./GridMesh/GridMesh";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -65,7 +61,7 @@ camera.lookAt(cameraPointToLookAt);
  *
  * */
 
-const renderer = new WebGLRenderer({ canvas });
+const renderer = new WebGLRenderer({ canvas, antialias: true });
 renderer.render(scene, camera);
 
 /**
@@ -217,7 +213,7 @@ grid.setCellValue(5, 5, 5);
 /**
  * Create the mesh and add it to the scene
  */
-const gridMesh = new GroupOfBoxes(grid);
+const gridMesh = new GridMesh(grid);
 scene.add(gridMesh);
 
 //task7a();
@@ -263,7 +259,7 @@ function onmouseup(event: MouseEvent) {
 
   //calculateViewDistance(grid, true);
 
-  //console.log(getAnalysisScore(grid));
+  console.log(getAnalysisScore(grid));
 }
 
 function screenToGridCoordinates(screenCoordinates: Vector3) {
@@ -281,7 +277,7 @@ window.addEventListener("mouseup", onmouseup);
 window.addEventListener("mousedown", onmousedown);
 
 document.getElementById("search")?.addEventListener("click", () => {
-  const sa = simulatedAnnealing(new Grid(), 100_000, 100);
+  const sa = simulatedAnnealing(new Grid(), 100_000, 10);
   function simulate() {
     const candidate = sa.next();
     gridMesh.update(candidate.value);

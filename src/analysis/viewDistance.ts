@@ -73,5 +73,7 @@ export function calculateViewDistance(grid: Grid, print: boolean = false): numbe
 
   if (scores.length === 0) return 0;
 
+  //return scores.reduce((prev, curr) => Math.min(prev, curr), scores[0]);
+
   return scores.reduce((a, b) => a + b, 0) / scores.length;
 }
