@@ -7,7 +7,7 @@ const frustumNearPlane = 0.1;
 const frustumFarPlane = 1000;
 
 const cameraUpAxis = new Vector3(0, 0, 1);
-const cameraInitialPosition = new Vector3(-5, -5, 1);
+export const cameraInitialPosition = new Vector3(-5, -5, 1);
 const cameraPointToLookAt = new Vector3(0, 0, 0);
 
 /*
@@ -19,7 +19,7 @@ export function setupCamera() {
   const camera = new THREE.PerspectiveCamera(fov, aspectRatio, frustumNearPlane, frustumFarPlane);
 
   camera.up = cameraUpAxis;
-  camera.position.set(cameraInitialPosition.x, cameraInitialPosition.y, cameraInitialPosition.z);
+  camera.position.copy(cameraInitialPosition);
   camera.lookAt(cameraPointToLookAt);
   return camera;
 }

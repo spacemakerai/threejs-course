@@ -1,96 +1,208 @@
 import "./style.css";
 import * as THREE from "three";
-import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH } from "./Grid";
+import {
+  AmbientLight,
+  DirectionalLight,
+  DirectionalLightHelper,
+  Mesh,
+  MeshLambertMaterial,
+  PerspectiveCamera,
+  PlaneGeometry,
+  Scene,
+  Vector3,
+  WebGLRenderer,
+} from "three";
+import Grid, { CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
 import Ground from "./Ground";
 import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
 import { State } from "./state";
-import { setupCamera } from "./camera";
-import { setupRenderer } from "./renderer";
-import { setupControls } from "./controls";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 
 import { findClosestClickedObject } from "./raycasting";
-import { AxesHelper, Camera, Renderer, Scene, Vector3 } from "three";
 import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
-import GridMesh, { IGridMesh } from "./GridMesh/GridMesh";
+import { IGridMesh } from "./GridMesh/GridMesh";
 import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { calculateViewDistance } from "./analysis/viewDistance";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+const fov = 75;
+const aspectRatio = window.innerWidth / window.innerHeight;
+const frustumNearPlane = 0.1;
+const frustumFarPlane = 1000;
+
+const cameraUpAxis = new Vector3(0, 0, 1);
+const cameraInitialPosition = new Vector3(-5, -5, 1);
+const cameraPointToLookAt = new Vector3(0, 0, 0);
+
+// TODO: Remove
 const NUMERIC_OFFSET = 1e-3;
-let scene: Scene;
-let camera: Camera;
+
+/**
+ * First we need to get the html element we want to draw everything on ....
+ * */
 const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasElement;
-let renderer: Renderer;
-/* TASK 1 - Setting up a scene to render
- * In this task, we want you to set up a new Scene, a Camera and a Renderer and render out an image to the web page
- * by calling the render() method on the renderer. We've given you some guidance in the camera.ts and renderer.ts files.
+
+/**
+ * The Scene is the...
+ *
+ * Docs:
+ * https://threejs.org/docs/#api/en/scenes/Scene
+ * */
+const scene = new Scene();
+const camera = new PerspectiveCamera(fov, aspectRatio, frustumNearPlane, frustumFarPlane);
+
+camera.up = cameraUpAxis;
+camera.position.copy(cameraInitialPosition);
+camera.lookAt(cameraPointToLookAt);
+
+/**
+ * The WebGLRenderer is responsible for drawing the scene on the canvas, viewed from the cameras position
+ *
+ * Task:
+ * - Initialize the WebGLRenderer with the canvas
+ * -
+ *
+ * */
+
+const renderer = new WebGLRenderer({ canvas });
+renderer.render(scene, camera);
+
+/**
+ * WOHOO! ThreeJs is now responsible for drawing the canvas. Lets add some content!
+ *
+ * Use the example to add a box
+ * https://threejs.org/docs/index.html#api/en/geometries/BoxGeometry
+ * */
+
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+renderer.render(scene, camera);
+
+/**
+ * Nice, we now have a cube, but it is so blurry!!
+ *
+ * Task: Use the WebGlRenderer.setSize() to set the renderer size to match the canvas
+ *
+ * Tip: The canvas size can be found as the properties canvas.clientWidth and canvas.clientHeight
+ *
+ * */
+
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.render(scene, camera);
+
+/**
+ * You can also set the background color to something less depressive using render.setClearColor
+ * */
+
+/**
+ * Animation loop
+ * You probably think it is annoying to have to write renderer.render every time you add something to the scene
+ * We can ask your browser to call this function 60 times per second automatically
+ *
+ * Task:
+ * - Add the renderer.render function call into the animate function.
+ * - Remove the manual renderer.render function calls you have already written, and see that this works
+ *
+ * Note:
+ * This will draw the scene all the time. asdasd
+ * */
+
+function animate() {
+  renderer.render(scene, camera); // Remove
+  requestAnimationFrame(animate);
+}
+animate();
+
+/**
+ * It would be nice to be able to move the camera around. This is a bit complicated, but luckily Three.js have an
+ * example we can use out of the box which works well enough for this course
+ *
+ * How does it work
+ * */
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+/**
+ * Set the color of the cube
+ * */
+
+cube.material.color.set(0xffffff);
+
+/** extra task todo
+ * The edges of the cube are not pretty. This is due to aliasing
  */
-function task1() {
-  scene = new Scene();
-  camera = setupCamera();
-  scene.add(new AxesHelper(1));
-  renderer = setupRenderer(canvas);
-  renderer.render(scene, camera);
-}
-task1();
 
-function task1b() {
-  setupControls(camera, renderer);
-  function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-  }
-  animate();
-}
-task1b();
+/**
+ * The shape of the box is just one big blob because we have no light.
+ *
+ * The material of the cube does not care about light.... lambert...
+ *
+ * Task:
+ * - Change the material of the cube from MeshBasicMaterial to MeshLambertMaterial
+ * - Create a DirectionalLight https://threejs.org/docs/index.html?q=direct#api/en/lights/DirectionalLight
+ * - Add the light to the scene
+ * - Position the light at position (-2, -5, 10)
+ */
 
-function task2() {
-  const geometry = new THREE.BoxGeometry(CELL_WIDTH_DEPTH, CELL_WIDTH_DEPTH, CELL_HEIGHT);
-  const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
-}
-task2();
+const directionalLight = new DirectionalLight(0xffffff, 0.7);
+directionalLight.position.set(-2, 0, 10);
+scene.add(directionalLight);
 
-function task3() {
-  const ground = new Ground();
-  scene.add(ground);
-}
-task3();
+scene.add(new DirectionalLightHelper(directionalLight));
 
-function task4() {
-  camera.position.set(Grid.center.x, Grid.center.y - 30, 30);
-  camera.lookAt(Grid.center.x, Grid.center.y, 0);
-}
-task4();
+/**
+ * The side of the cube not receiving any light is now completely dark
+ *
+ * ambient...
+ *
+ * */
 
-function task5() {
-  const dirlight = getDirLight();
-  scene.add(dirlight.target);
-  scene.add(dirlight);
-  scene.add(getAmbientLight());
-}
-task5();
+const ambientLight = new AmbientLight(0xffffff, 0.4);
+scene.add(ambientLight);
 
-let grid: Grid;
-//Task: Create a grid using our provided Grid class, and try to use the functions exposed in it to set the number of
-// floors for a position of your choice. Check that it worked by console.log()ing the result.
-function task6() {
-  grid = new Grid(); //to be added as task: State.load() || new Grid();
-  //grid.setCellValue(10, 10, 4);
-}
-task6();
+/**
+ * Lets start building Spacemaker light version!
+ *
+ * Demo
+ *
+ */
 
-let gridMesh: IGridMesh;
-//Task: Now we want to render the grid we defined in task 6 as 3D boxes. Define and add the GroupOfBoxes class to the
-//scene, and implement the necessary functions inside GroupOfBoxes.ts.
-function task7a() {
-  gridMesh = new GroupOfBoxes(grid);
-  scene.add(gridMesh);
-}
+const groundGeometry = new PlaneGeometry(GRID_WIDTH * CELL_WIDTH_DEPTH, GRID_DEPTH * CELL_WIDTH_DEPTH);
+const groundMaterial = new MeshLambertMaterial();
+const groundMesh = new Mesh(groundGeometry, groundMaterial);
+groundMesh.position.set((GRID_WIDTH * CELL_WIDTH_DEPTH) / 2, (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2, 0);
+scene.add(groundMesh);
 
-task7a();
+/**
+ * It would be nice to have the camera looking in the middle of the
+ */
+
+camera.position.set(Grid.center.x, Grid.center.y - 70, 80);
+controls.target.set(Grid.center.x, Grid.center.y, 0);
+controls.update();
+
+/**
+ * Grid time
+ *
+ * Task: Create a grid using our provided Grid class, and try to use the functions exposed in it to set the number of
+ * floors for a position of your choice. Check that it worked by console.log()ing the result.
+ *
+ * - Add a builing to the grid, with grid.setCellValue(x, y, height)
+ */
+
+const grid = new Grid();
+grid.setCellValue(5, 5, 5);
+
+/**
+ * Create the mesh and add it to the scene
+ */
+const gridMesh = new GroupOfBoxes(grid);
+scene.add(gridMesh);
+
+//task7a();
 
 // function task900() {
 //   gridMesh = new GridMesh();
