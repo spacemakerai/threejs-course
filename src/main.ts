@@ -20,7 +20,10 @@ let scene: Scene;
 let camera: Camera;
 const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasElement;
 let renderer: Renderer;
-// TASK 1 - Setting up a scene to render
+/* TASK 1 - Setting up a scene to render
+ * In this task, we want you to set up a new Scene, a Camera and a Renderer and render out an image to the web page
+ * by calling the render() method on the renderer. We've given you some guidance in the camera.ts and renderer.ts files.
+ */
 function task1() {
   scene = new Scene();
   camera = setupCamera();
