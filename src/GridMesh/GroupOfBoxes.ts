@@ -1,14 +1,14 @@
 import { BoxGeometry, EdgesGeometry, FrontSide, Group, LineBasicMaterial, LineSegments, Mesh, MeshLambertMaterial } from "three";
-import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_HEIGHT, GRID_WIDTH } from "./Grid";
+import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_HEIGHT, GRID_WIDTH } from "../Grid";
 
-const BOX_MATERIAL = new MeshLambertMaterial({
+export const BOX_MATERIAL = new MeshLambertMaterial({
   side: FrontSide,
   shadowSide: FrontSide,
   polygonOffset: true,
   polygonOffsetFactor: 1,
 });
 
-const EDGES_MATERIAL = new LineBasicMaterial({ color: 0x444444 });
+export const EDGES_MATERIAL = new LineBasicMaterial({ color: 0x444444 });
 
 export default class GroupOfBoxes extends Group {
   #grid: Grid;

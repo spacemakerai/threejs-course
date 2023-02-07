@@ -2,7 +2,6 @@ import "./style.css";
 import * as THREE from "three";
 import Grid, { CELL_WIDTH_DEPTH } from "./Grid";
 import Ground from "./Ground";
-import GroupOfBoxes from "./GroupOfBoxes";
 import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
 import { State } from "./state";
@@ -13,12 +12,15 @@ import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 import { SimulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { findClosestClickedObject } from "./raycasting";
 import { Vector3 } from "three";
+import GridMesh from "./GridMesh/GridMesh";
 
 const NUMERIC_OFFSET = 1e-3;
 
 const scene = new THREE.Scene();
 const camera = setupCamera();
 const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasElement;
+
+console.log(scene);
 
 const renderer = setupRenderer(canvas);
 
@@ -33,7 +35,8 @@ scene.add(dirlight.target);
 scene.add(getAmbientLight());
 
 const grid = State.load() || new Grid();
-const gridMesh = new GroupOfBoxes(grid);
+const gridMesh = new GridMesh();
+gridMesh.update(grid);
 scene.add(gridMesh);
 
 const axesHelper = new THREE.AxesHelper(5);
@@ -73,7 +76,7 @@ function onmouseup(event: MouseEvent) {
 
   grid.setCellValue(x, y, newVal);
   State.save(grid);
-  gridMesh.update();
+  gridMesh.update(grid);
 
   console.log(getAnalysisScore(grid));
 }
@@ -94,7 +97,7 @@ window.addEventListener("mousedown", onmousedown);
 
 document.getElementById("search")?.addEventListener("click", () => {
   const sa = new SimulatedAnnealing(new Grid());
-  sa.run(40_000);
+  sa.run(100_000);
   grid.decode(sa.grid.encode());
-  gridMesh.update();
+  gridMesh.update(sa.grid);
 });

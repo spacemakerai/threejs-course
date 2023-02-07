@@ -10,7 +10,6 @@
 - onClick, split up nicely
 - Find the flow
 - Search algo
-- Edges
 
 - Write efficient gridMesh
 - Rewrite grid to be x * y * height

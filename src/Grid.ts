@@ -3,8 +3,8 @@ import { Vector2 } from "three";
 export const CELL_WIDTH_DEPTH = 6;
 export const CELL_HEIGHT = 3;
 
-export const GRID_WIDTH = 30;
-export const GRID_DEPTH = 30;
+export const GRID_WIDTH = 20;
+export const GRID_DEPTH = 20;
 export const GRID_HEIGHT = 5;
 
 export default class Grid {
