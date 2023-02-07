@@ -81,8 +81,7 @@ function onmouseup(event: MouseEvent) {
 function screenToGridCoordinates(screenCoordinates: Vector3) {
   const x = Math.floor((screenCoordinates.x + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
   const y = Math.floor((screenCoordinates.y + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
-  const z = Math.floor((screenCoordinates.z + NUMERIC_OFFSET) / CELL_HEIGHT);
-  return { x, y, z };
+  return { x, y };
 }
 
 function onmousedown(event: MouseEvent) {
