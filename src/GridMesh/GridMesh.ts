@@ -5,7 +5,11 @@ import { BufferAttribute, BufferGeometry, Group, LineSegments, Mesh } from "thre
 import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "../Grid";
 import { BOX_MATERIAL, EDGES_MATERIAL } from "./GroupOfBoxes";
 
-export default class GridMesh extends Group {
+export interface IGridMesh extends Group {
+  update(grid: Grid): void;
+}
+
+export default class GridMesh extends Group implements IGridMesh {
   mesh: Mesh;
   lineSegments: LineSegments;
 
