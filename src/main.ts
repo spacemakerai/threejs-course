@@ -9,11 +9,13 @@ import { setupCamera } from "./camera";
 import { setupRenderer } from "./renderer";
 import { setupControls } from "./controls";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
-import { SimulatedAnnealing } from "./optimize/simulatedAnnealing";
+
 import { findClosestClickedObject } from "./raycasting";
 import { AxesHelper, Camera, Renderer, Scene, Vector3 } from "three";
 import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
 import GridMesh, { IGridMesh } from "./GridMesh/GridMesh";
+import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
+import { calculateViewDistance } from "./analysis/viewDistance";
 
 const NUMERIC_OFFSET = 1e-3;
 let scene: Scene;
@@ -76,7 +78,7 @@ let grid: Grid;
 // floors for a position of your choice. Check that it worked by console.log()ing the result.
 function task6() {
   grid = new Grid(); //to be added as task: State.load() || new Grid();
-  grid.setCellValue(10, 10, 4);
+  //grid.setCellValue(10, 10, 4);
 }
 task6();
 
@@ -90,11 +92,11 @@ function task7a() {
 
 task7a();
 
-function task900() {
-  gridMesh = new GridMesh();
-  gridMesh.update(grid);
-}
-task900();
+// function task900() {
+//   gridMesh = new GridMesh();
+//   gridMesh.update(grid);
+// }
+// task900();
 
 function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boolean {
   if (!down) return false;
@@ -126,6 +128,8 @@ function onmouseup(event: MouseEvent) {
   State.save(grid);
   gridMesh.update(grid);
 
+  calculateViewDistance(grid, true);
+
   console.log(getAnalysisScore(grid));
 }
 
@@ -144,8 +148,16 @@ window.addEventListener("mouseup", onmouseup);
 window.addEventListener("mousedown", onmousedown);
 
 document.getElementById("search")?.addEventListener("click", () => {
-  const sa = new SimulatedAnnealing(new Grid());
-  sa.run(100_000);
-  grid.decode(sa.grid.encode());
-  gridMesh.update(sa.grid);
+  const sa = simulatedAnnealing(new Grid(), 100_000, 100);
+  function simulate() {
+    const candidate = sa.next();
+    gridMesh.update(candidate.value);
+    renderer.render(scene, camera);
+    if (!candidate.done) {
+      requestAnimationFrame(simulate);
+    } else {
+      grid.decode(candidate.value.encode());
+    }
+  }
+  simulate();
 });

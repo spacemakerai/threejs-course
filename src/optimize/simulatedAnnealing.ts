@@ -1,41 +1,59 @@
-import Grid, { GRID_DEPTH, GRID_WIDTH } from "../Grid";
+import Grid, { GRID_DEPTH, GRID_HEIGHT, GRID_WIDTH } from "../Grid";
 import { getAnalysisScore } from "../analysis";
 
-export class SimulatedAnnealing {
-  grid: Grid;
+function getNeighbour(grid: Grid) {
+  const cloned = grid.clone();
 
-  constructor(grid: Grid) {
-    this.grid = grid;
-  }
-
-  getNeighbour() {
-    const cloned = this.grid.clone();
+  if (Math.random() < 0.5) {
     const x = getRandomInt(0, GRID_WIDTH);
     const y = getRandomInt(0, GRID_DEPTH);
-
     const diff = getRandomInt(-2, 2);
     cloned.diff(x, y, diff);
-    return cloned;
+  } else {
+    const x0 = getRandomInt(0, GRID_WIDTH);
+    const y0 = getRandomInt(0, GRID_DEPTH);
+
+    const x1 = getRandomInt(0, GRID_WIDTH);
+    const y1 = getRandomInt(0, GRID_DEPTH);
+
+    const v0 = cloned.getCellValue(x0, y0);
+    const v1 = cloned.getCellValue(x1, y1);
+    cloned.setCellValue(x0, x0, v1);
+    cloned.setCellValue(x1, x1, v0);
   }
 
-  run(MAX_ITER: number = 1_000) {
-    for (let i = 0; i < MAX_ITER; i++) {
-      const neigbour = this.getNeighbour();
+  return cloned;
+}
 
-      const oldScore = getAnalysisScore(this.grid);
-      const newScore = getAnalysisScore(neigbour);
+export function* simulatedAnnealing(grid: Grid, MAX_ITER: number = 1_000, NO_PRINTS: number = 10) {
+  let current: Grid = grid;
+  let best = current;
+  let bestScore = getAnalysisScore(current);
 
-      if (i % (MAX_ITER / 10) === 0) {
-        console.log(i, oldScore);
-      }
+  for (let i = 0; i < MAX_ITER; i++) {
+    const neigbour = getNeighbour(current);
 
-      const Paccept = Math.exp((-i / 1) * ((oldScore - newScore) / oldScore));
+    const oldScore = getAnalysisScore(current);
+    const newScore = getAnalysisScore(neigbour);
 
-      if (Math.random() < Paccept) {
-        this.grid = neigbour;
-      }
+    if (i % (MAX_ITER / NO_PRINTS) === 0) {
+      console.log(i, oldScore);
+      //getAnalysisScore(current, true);
+      yield current;
+    }
+
+    const Paccept = Math.exp((-i / 1) * ((oldScore - newScore) / oldScore));
+
+    if (Math.random() < Paccept) {
+      current = neigbour;
+    }
+    if (newScore > bestScore) {
+      best = current;
+      bestScore = newScore;
     }
   }
+
+  return best;
 }
 
 function getRandomInt(min: number, max: number) {

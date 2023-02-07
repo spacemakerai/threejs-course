@@ -41,8 +41,6 @@ export default class GridMesh extends Group implements IGridMesh {
       }
     }
 
-    console.log(meshPositions.length, meshPositions.length / 3);
-
     this.mesh.geometry.setAttribute("position", new BufferAttribute(new Float32Array(meshPositions.flat()), 3));
     this.mesh.geometry.attributes.position.needsUpdate = true;
 
@@ -51,6 +49,8 @@ export default class GridMesh extends Group implements IGridMesh {
 
     this.lineSegments.geometry.setAttribute("position", new BufferAttribute(new Float32Array(lineSegmentsPositions.flat()), 3));
     this.lineSegments.geometry.attributes.position.needsUpdate = true;
+
+    console.log("Update done");
   }
 }
 
