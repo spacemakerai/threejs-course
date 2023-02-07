@@ -69,7 +69,7 @@ const renderer = new WebGLRenderer({ canvas });
 renderer.render(scene, camera);
 
 /**
- * WOHOO! ThreeJs is now responsible for drawing the canvas. Lets add some content!
+ * WOHOO! ThreeJs is now responsible for drawing the canvas. Let's add some content!
  *
  * Use the example to add a box
  * https://threejs.org/docs/index.html#api/en/geometries/BoxGeometry
@@ -94,8 +94,10 @@ renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 renderer.render(scene, camera);
 
 /**
- * You can also set the background color to something less depressive using render.setClearColor
+ * You can also set the background color to something less depressing using render.setClearColor
  * */
+
+renderer.setClearColor("SkyBlue", 1);
 
 /**
  * Animation loop
@@ -107,7 +109,9 @@ renderer.render(scene, camera);
  * - Remove the manual renderer.render function calls you have already written, and see that this works
  *
  * Note:
- * This will draw the scene all the time. asdasd
+ * This will draw the scene all the time. In production environments you most likely want to be smart about
+ * when you actually call render(), to avoid rendering when there are no updates to the scene, to
+ * save computation time for other
  * */
 
 function animate() {
@@ -118,45 +122,51 @@ animate();
 
 /**
  * It would be nice to be able to move the camera around. This is a bit complicated, but luckily Three.js have an
- * example we can use out of the box which works well enough for this course
+ * example we can use out of the box which works well enough for this course. It can be added by new OrbitControls
  *
- * How does it work
+ * OrbitControls work by taking in the camera and the canvas and listening to mouse events on the canvas to calculate
+ * how far to move or rotate the camera – which it does by mutating properties on the passed-in camera.
+ *
+ * Task: Create new OrbitControls and assign it to a variable `controls` so we can reference it later.
  * */
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
 /**
- * Set the color of the cube
+ * The cube is very green! Why don't we make it look slightly less jarring?
+ * Task: Mutate the `color` property on the material to white.
  * */
 
-cube.material.color.set(0xffffff);
-
-/** extra task todo
- * The edges of the cube are not pretty. This is due to aliasing
- */
+material.color.set(0xffffff);
 
 /**
- * The shape of the box is just one big blob because we have no light.
+ * The shape of the box is just one big blob – that's because the mesh's material is not affected by lights and that
+ * we have no lights!
  *
- * The material of the cube does not care about light.... lambert...
  *
  * Task:
  * - Change the material of the cube from MeshBasicMaterial to MeshLambertMaterial
  * - Create a DirectionalLight https://threejs.org/docs/index.html?q=direct#api/en/lights/DirectionalLight
  * - Add the light to the scene
  * - Position the light at position (-2, -5, 10)
+ *
+ * We suggest using an intensity of 0.7
+ * Tip: If you want to view where the light is placed, you can use add a new DirectionalLightHelper to the scene!
  */
 
 const directionalLight = new DirectionalLight(0xffffff, 0.7);
 directionalLight.position.set(-2, 0, 10);
 scene.add(directionalLight);
 
-scene.add(new DirectionalLightHelper(directionalLight));
-
 /**
- * The side of the cube not receiving any light is now completely dark
+ * The side of the cube that is in the shadow is completely black, making it hard to see anything.
+ * That can be fixed by having some ambient light!
  *
- * ambient...
+ *
+ * Task:
+ * - Add a new AmbientLight to the scene
+ *
+ * We suggest using an intensity of 0.4
  *
  * */
 
@@ -168,6 +178,14 @@ scene.add(ambientLight);
  *
  * Demo
  *
+ * Let's start by adding the ground where the buildings can stand.
+ *
+ * Task:
+ * - Create a PlaneGeometry
+ * - Create a MeshLambertMaterial
+ * - Create a mesh from the geometry and the material
+ * - To make it easier to think about positioning on the ground, we want XY (0,0) to be in the bottom left corner
+ *   of the ground. By default, a mesh's position is calculated from the middle of the mesh  ...blabla
  */
 
 const groundGeometry = new PlaneGeometry(GRID_WIDTH * CELL_WIDTH_DEPTH, GRID_DEPTH * CELL_WIDTH_DEPTH);
@@ -204,6 +222,9 @@ scene.add(gridMesh);
 
 //task7a();
 
+/** extra task todo
+ * The edges of the cube are not pretty. This is due to aliasing
+ */
 // function task900() {
 //   gridMesh = new GridMesh();
 //   gridMesh.update(grid);
