@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Renderer, WebGLRenderer } from "three";
+import { WebGLRenderer } from "three";
 
 const rendererWidth = window.innerWidth;
 const rendererHeight = window.innerHeight;
