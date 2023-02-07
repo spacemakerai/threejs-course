@@ -1,6 +1,6 @@
 import "./style.css";
 import * as THREE from "three";
-import Grid, { CELL_WIDTH_DEPTH } from "./Grid";
+import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH } from "./Grid";
 import Ground from "./Ground";
 import { getAmbientLight, getDirLight } from "./Lights";
 import { getAnalysisScore } from "./analysis";
@@ -11,42 +11,90 @@ import { setupControls } from "./controls";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 import { SimulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { findClosestClickedObject } from "./raycasting";
-import { Vector3 } from "three";
-import GridMesh from "./GridMesh/GridMesh";
+import { AxesHelper, Camera, Renderer, Scene, Vector3 } from "three";
+import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
+import GridMesh, { IGridMesh } from "./GridMesh/GridMesh";
 
 const NUMERIC_OFFSET = 1e-3;
-
-const scene = new THREE.Scene();
-const camera = setupCamera();
+let scene: Scene;
+let camera: Camera;
 const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasElement;
-
-console.log(scene);
-
-const renderer = setupRenderer(canvas);
-
-setupControls(camera, renderer);
-
-const ground = new Ground();
-scene.add(ground);
-
-const dirlight = getDirLight();
-scene.add(dirlight);
-scene.add(dirlight.target);
-scene.add(getAmbientLight());
-
-const grid = State.load() || new Grid();
-const gridMesh = new GridMesh();
-gridMesh.update(grid);
-scene.add(gridMesh);
-
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
-
-function animate() {
-  requestAnimationFrame(animate);
+let renderer: Renderer;
+/* TASK 1 - Setting up a scene to render
+ * In this task, we want you to set up a new Scene, a Camera and a Renderer and render out an image to the web page
+ * by calling the render() method on the renderer. We've given you some guidance in the camera.ts and renderer.ts files.
+ */
+function task1() {
+  scene = new Scene();
+  camera = setupCamera();
+  scene.add(new AxesHelper(1));
+  renderer = setupRenderer(canvas);
   renderer.render(scene, camera);
 }
-animate();
+task1();
+
+function task1b() {
+  setupControls(camera, renderer);
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+task1b();
+
+function task2() {
+  const geometry = new THREE.BoxGeometry(CELL_WIDTH_DEPTH, CELL_WIDTH_DEPTH, CELL_HEIGHT);
+  const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+}
+task2();
+
+function task3() {
+  const ground = new Ground();
+  scene.add(ground);
+}
+task3();
+
+function task4() {
+  camera.position.set(Grid.center.x, Grid.center.y - 30, 30);
+  camera.lookAt(Grid.center.x, Grid.center.y, 0);
+}
+task4();
+
+function task5() {
+  const dirlight = getDirLight();
+  scene.add(dirlight.target);
+  scene.add(dirlight);
+  scene.add(getAmbientLight());
+}
+task5();
+
+let grid: Grid;
+//Task: Create a grid using our provided Grid class, and try to use the functions exposed in it to set the number of
+// floors for a position of your choice. Check that it worked by console.log()ing the result.
+function task6() {
+  grid = new Grid(); //to be added as task: State.load() || new Grid();
+  grid.setCellValue(10, 10, 4);
+}
+task6();
+
+let gridMesh: IGridMesh;
+//Task: Now we want to render the grid we defined in task 6 as 3D boxes. Define and add the GroupOfBoxes class to the
+//scene, and implement the necessary functions inside GroupOfBoxes.ts.
+function task7a() {
+  gridMesh = new GroupOfBoxes(grid);
+  scene.add(gridMesh);
+}
+
+task7a();
+
+function task900() {
+  gridMesh = new GridMesh();
+  gridMesh.update(grid);
+}
+task900();
 
 function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boolean {
   if (!down) return false;

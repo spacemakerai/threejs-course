@@ -1,5 +1,6 @@
 import { BoxGeometry, EdgesGeometry, FrontSide, Group, LineBasicMaterial, LineSegments, Mesh, MeshLambertMaterial } from "three";
 import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_HEIGHT, GRID_WIDTH } from "../Grid";
+import { IGridMesh } from "./GridMesh";
 
 export const BOX_MATERIAL = new MeshLambertMaterial({
   side: FrontSide,
@@ -10,17 +11,18 @@ export const BOX_MATERIAL = new MeshLambertMaterial({
 
 export const EDGES_MATERIAL = new LineBasicMaterial({ color: 0x444444 });
 
-export default class GroupOfBoxes extends Group {
+export default class GroupOfBoxes extends Group implements IGridMesh {
   #grid: Grid;
 
   constructor(grid: Grid) {
     super();
 
     this.#grid = grid;
-    this.update();
+    this.update(grid);
   }
 
-  update() {
+  update(grid: Grid) {
+    this.#grid = grid;
     const children = [...this.children];
     for (let child of children) {
       this.remove(child);
