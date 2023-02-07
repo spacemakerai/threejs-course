@@ -11,6 +11,6 @@ export function getAnalysisScore(grid: Grid): number {
     sellableApartments: calculateApartmentCount(grid),
   };
 
-  const score = [scores.outdoor2, scores.view, scores.sellableApartments];
+  const score = [scores.outdoor1, scores.view, scores.sellableApartments * 5];
   return score.reduce((a, b) => a + b, 0) / score.length;
 }

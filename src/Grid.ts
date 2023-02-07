@@ -19,17 +19,9 @@ export default class Grid {
     this.array = Array.from(Array(GRID_WIDTH)).map((_) => Array.from(Array(GRID_DEPTH)).map((_) => 0));
   }
 
-  addOne(x: number, y: number) {
+  diff(x: number, y: number, diff: number) {
     const currentVal = this.array[x][y];
-    let newVal = currentVal + 1;
-    newVal = Math.min(newVal, GRID_HEIGHT);
-    newVal = Math.max(newVal, 0);
-    this.array[x][y] = newVal;
-  }
-
-  subtractOne(x: number, y: number) {
-    const currentVal = this.array[x][y];
-    let newVal = currentVal - 1;
+    let newVal = currentVal + diff;
     newVal = Math.min(newVal, GRID_HEIGHT);
     newVal = Math.max(newVal, 0);
     this.array[x][y] = newVal;

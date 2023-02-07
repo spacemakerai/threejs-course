@@ -1,6 +1,6 @@
 import Grid, { GRID_DEPTH, GRID_WIDTH } from "../Grid";
 
-const MAX = 10;
+const MAX = 6;
 
 export function calculateViewDistance(grid: Grid): number {
   let scores = [];

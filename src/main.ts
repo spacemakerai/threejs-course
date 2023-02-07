@@ -114,7 +114,7 @@ window.addEventListener("mousedown", onmousedown);
 
 document.getElementById("search")?.addEventListener("click", () => {
   const sa = new SimulatedAnnealing(new Grid());
-  sa.run(10_000);
+  sa.run(40_000);
   grid.decode(sa.grid.encode());
   gridMesh.update();
 });

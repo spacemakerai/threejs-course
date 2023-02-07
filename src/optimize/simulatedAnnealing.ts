@@ -13,11 +13,8 @@ export class SimulatedAnnealing {
     const x = getRandomInt(0, GRID_WIDTH);
     const y = getRandomInt(0, GRID_DEPTH);
 
-    if (Math.random() < 0.7) {
-      cloned.addOne(x, y);
-    } else {
-      cloned.subtractOne(x, y);
-    }
+    const diff = getRandomInt(-2, 2);
+    cloned.diff(x, y, diff);
     return cloned;
   }
 
