@@ -23,6 +23,8 @@ import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
 import { viewScores } from "./viewScores";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { listenForButtonClicks } from "./eventListeners";
+import { viewConstraints } from "./viewConstraints";
+import { constraintGrid } from "./constraint";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -370,5 +372,8 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
 // const fox = await loader.loadAsync("Fox.glb");
 //
 // scene.add(fox.scene);
+document.getElementById("viewConstraints")?.addEventListener("click", () => {
+  viewConstraints(constraintGrid);
+});
 
 listenForButtonClicks(gridMesh, renderer, scene, camera, grid);

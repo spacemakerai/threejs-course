@@ -27,10 +27,6 @@ export function listenForButtonClicks(gridMesh: IGridMesh, renderer: Renderer, s
     simulate();
   });
 
-  document.getElementById("viewConstraints")?.addEventListener("click", () => {
-    viewConstraints(constraintGrid);
-  });
-
   document.getElementById("save")?.addEventListener("click", () => {
     State.save(grid);
   });
