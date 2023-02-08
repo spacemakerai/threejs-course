@@ -18,7 +18,7 @@ import {
 } from "three";
 import Grid from "./Grid";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
+import GroupOfBoxes from "./GridMesh/GroupOfBoxes-lf";
 import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
 import { viewScores } from "./viewScores";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
