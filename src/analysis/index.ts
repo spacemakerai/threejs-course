@@ -16,7 +16,7 @@ export function getAnalysisScore(grid: Grid) {
   return evaluate(result);
 }
 
-function evaluate(result: AnalysisResult) {
+export function evaluate(result: AnalysisResult) {
   return (result.view + result.sellableApartments + result.outdoor + result.constraint) / 4;
 }
 
