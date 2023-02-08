@@ -18,7 +18,7 @@ import {
 } from "three";
 import Grid from "./Grid";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import GroupOfBoxes from "./GridMesh/GroupOfBoxes-lf";
+import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
 import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
 import { viewScores } from "./viewScores";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -59,12 +59,12 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * https://threejs.org/docs/?q=perspec#api/en/cameras/PerspectiveCamera
  *
  * */
+const scene = new Scene();
+const camera = new PerspectiveCamera(fov, aspectRatio, frustumNearPlane, frustumFarPlane);
 
-//Your code here
-
-//camera.up = cameraUpAxis;
-//camera.position.copy(cameraInitialPosition);
-//camera.lookAt(cameraPointToLookAt);
+camera.up = cameraUpAxis;
+camera.position.copy(cameraInitialPosition);
+camera.lookAt(cameraPointToLookAt);
 
 /**
  * ====== TASK 2 ======
@@ -76,7 +76,8 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-//Your code here
+const renderer = new WebGLRenderer({ canvas, antialias: true });
+renderer.render(scene, camera);
 
 /**
  * ====== TASK 3 ======
@@ -91,7 +92,11 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * - Make sure to call the render() method on the renderer again to tell three.js to render what we have given it
  * */
 
-//Your code here
+const geometry = new BoxGeometry(1, 1, 1);
+const material = new MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new Mesh(geometry, material);
+scene.add(cube);
+renderer.render(scene, camera);
 
 /**
  * ====== TASK 4 ======
@@ -105,14 +110,14 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-//Your code here
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.render(scene, camera);
 
 /**
  * You can also set the background color to something less depressing using render.setClearColor
- * What about a nice "SkyBlue"?
  * */
 
-//Your code here
+renderer.setClearColor("SkyBlue", 1);
 
 /**
  * ====== TASK 5 ======
@@ -130,7 +135,11 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * save computation time for other important tasks.
  * */
 
-//Your code here
+function animate() {
+  renderer.render(scene, camera); // Remove
+  requestAnimationFrame(animate);
+}
+animate();
 
 /**
  * ====== TASK 6 ======
@@ -145,7 +154,7 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * - Create new OrbitControls and assign it to a variable `controls` so we can reference it later.
  * */
 
-//Your code here
+const controls = new OrbitControls(camera, renderer.domElement);
 
 /**
  * ====== TASK 7 ======
@@ -154,7 +163,7 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * - Mutate the `color` property on the material to white.
  * */
 
-//Your code here
+material.color.set(0xffffff);
 
 /**
  * ====== TASK 8 ======
@@ -172,7 +181,10 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * Tip: If you want to view where the light is placed, you can add a new DirectionalLightHelper to the scene!
  */
 
-//Your code here
+const directionalLight = new DirectionalLight(0xffffff, 0.9);
+directionalLight.position.set(-100, -20, 60);
+scene.add(directionalLight);
+scene.add(new DirectionalLightHelper(directionalLight));
 
 /**
  * ====== TASK 9 ======
@@ -187,7 +199,8 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-//Your code here
+const ambientLight = new AmbientLight(0xffffff, 0.4);
+scene.add(ambientLight);
 
 /**
  * ====== TASK 10 ======
@@ -218,10 +231,13 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  */
 
-//Your code here
+const groundGeometry = new PlaneGeometry(GRID_SIZE.x, GRID_SIZE.y);
+const groundMaterial = new MeshLambertMaterial({ color: 0xaaaaaa });
+const groundMesh = new Mesh(groundGeometry, groundMaterial);
+scene.add(groundMesh);
 
 //TODO: Separate task to set position to make positioning clearer and more understandable?
-//groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
+groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 
 /**
  * ====== TASK 11 ======
@@ -234,7 +250,9 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * Tip: The center of the grid is defined in the GRID_CENTER constant
  */
 
-//Your code here
+camera.position.set(GRID_CENTER.x, GRID_CENTER.y - 70, 80);
+controls.target.set(GRID_CENTER.x, GRID_CENTER.y, 0);
+controls.update();
 
 /**
  * ====== TASK 12 ======
@@ -252,7 +270,9 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * - Check that it worked by console.log()ing the result.
  */
 
-//Your code here
+const grid = new Grid();
+grid.setCellValue(5, 5, 5);
+grid.setCellValue(5, 7, 4);
 
 /**
  * ====== TASK 13 ======
@@ -268,8 +288,8 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *   after you edit the grid
  */
 
-// const gridMesh = new GroupOfBoxes(grid);
-// scene.add(gridMesh);
+const gridMesh = new GroupOfBoxes(grid);
+scene.add(gridMesh);
 
 /**
  * ====== TASK 14 ======
@@ -307,7 +327,36 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-//Your code here
+canvas.addEventListener("mouseup", onmouseup);
+
+function onmouseup(event: MouseEvent) {
+  const positionInCanvas = findPositionInCanvas(event, canvas);
+
+  // We check if the mouse moved between the mousedown and mouse up events.
+  // We don't want to add apartments if the user only wanted to move the camera
+  // if (movedWhileClicking(mouseDownPosition, normalizedCoordinates)) {
+  //   return;
+  // }
+
+  const raycaster = new Raycaster();
+  raycaster.setFromCamera(positionInCanvas, camera);
+
+  const intersections = raycaster.intersectObjects([groundMesh, gridMesh]);
+  if (intersections.length === 0) {
+    // We didn't hit anything in the scene
+    return;
+  }
+
+  const closest = intersections[0];
+
+  const { x, y } = worldCoordinatesToGridIndex(closest.point);
+
+  const currentValue = grid.getCellValue(x, y);
+  grid.setCellValue(x, y, Math.max(currentValue + (event.shiftKey ? -1 : 1), 0));
+  gridMesh.update(grid);
+
+  viewScores(grid);
+}
 
 /**
  * Normalized device coordinate or NDC space is a screen independent display coordinate system;

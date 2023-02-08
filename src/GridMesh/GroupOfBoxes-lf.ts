@@ -39,7 +39,16 @@ export default class GroupOfBoxes extends Group implements IGridMesh {
      * - The size of the box is defined by the constant CELL_SIZE
      * - The box is centered in the middle. You need to add an offset to the position of the box to compensate for this.
      * */
-    //Your code here
+
+    const size = new Vector3(CELL_SIZE.x, CELL_SIZE.y, floors * CELL_SIZE.z);
+
+    const box = new Mesh(new BoxGeometry(size.x, size.y, size.z), BOX_MATERIAL);
+
+    const gridPosition = new Vector3(CELL_SIZE.x * x, CELL_SIZE.y * y, 0);
+    const centerOffset = new Vector3().copy(size).divideScalar(2);
+    box.position.copy(gridPosition.add(centerOffset));
+
+    this.add(box);
   }
 
   cleanup() {
