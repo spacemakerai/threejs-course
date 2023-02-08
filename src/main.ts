@@ -24,6 +24,7 @@ import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
 import ConstraintMesh from "./GridMesh/ConstraintMesh";
 import { constraintGrid } from "./constraint";
 import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
+import { viewScores } from "./viewScores";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -68,6 +69,7 @@ const renderer = new WebGLRenderer({ canvas, antialias: true });
 renderer.render(scene, camera);
 
 /**
+ * ====== TASK 3 ======
  * WOHOO! ThreeJs is now responsible for drawing the canvas. Let's add some content!
  *
  * Use the example to add a box
@@ -81,6 +83,7 @@ scene.add(cube);
 renderer.render(scene, camera);
 
 /**
+ * ====== TASK 4 ======
  * Nice, we now have a cube, but it is so blurry!!
  *
  * Task: Use the WebGlRenderer.setSize() to set the renderer size to match the canvas
@@ -99,6 +102,7 @@ renderer.render(scene, camera);
 renderer.setClearColor("SkyBlue", 1);
 
 /**
+ * ====== TASK 5 ======
  * Animation loop
  * You probably think it is annoying to have to write renderer.render every time you add something to the scene
  * We can ask your browser to call this function 60 times per second automatically
@@ -120,6 +124,7 @@ function animate() {
 animate();
 
 /**
+ * ====== TASK 6 ======
  * It would be nice to be able to move the camera around. This is a bit complicated, but luckily Three.js have an
  * example we can use out of the box which works well enough for this course. It can be added by new OrbitControls
  *
@@ -132,6 +137,7 @@ animate();
 const controls = new OrbitControls(camera, renderer.domElement);
 
 /**
+ * ====== TASK 7 ======
  * The cube is very green! Why don't we make it look slightly less jarring?
  * Task: Mutate the `color` property on the material to white.
  * */
@@ -139,6 +145,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 material.color.set(0xffffff);
 
 /**
+ * ====== TASK 8 ======
  * The shape of the box is just one big blob – that's because the mesh's material is not affected by lights and that
  * we have no lights!
  *
@@ -150,7 +157,7 @@ material.color.set(0xffffff);
  * - Position the light at position (-2, -5, 10)
  *
  * We suggest using an intensity of 0.7
- * Tip: If you want to view where the light is placed, you can use add a new DirectionalLightHelper to the scene!
+ * Tip: If you want to view where the light is placed, you can add a new DirectionalLightHelper to the scene!
  */
 
 const directionalLight = new DirectionalLight(0xffffff, 0.9);
@@ -159,6 +166,7 @@ scene.add(directionalLight);
 scene.add(new DirectionalLightHelper(directionalLight));
 
 /**
+ * ====== TASK 9 ======
  * The side of the cube that is in the shadow is completely black, making it hard to see anything.
  * That can be fixed by having some ambient light!
  *
@@ -174,11 +182,12 @@ const ambientLight = new AmbientLight(0xffffff, 0.4);
 scene.add(ambientLight);
 
 /**
- * Lets start building Spacemaker light version!
+ * ====== TASK 10 ======
+ * Let's start building Spacemaker light version!
  *
  * Demo
  *
- * Imagine we have a grid that has nxm cells, where each cell represents a spot where a building can be placed:
+ * Imagine we have a grid that has n x m cells, where each cell represents a spot where a building can be placed:
  *
  * +---+---+---+---+
  * | o | o | o | o |
@@ -210,9 +219,12 @@ scene.add(groundMesh);
 groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 
 /**
+ * ====== TASK 11 ======
  * It would be nice to have the camera looking towards the middle of our site from the get-go.
  * To position the camera, you can use "camera.position.set()" and to make the camera angled towards something you can use
  * "controls.target.set()". Finally you must do a "controls.update()".
+ * Task:
+ * - Make the camera look at the center of the site
  */
 
 camera.position.set(GRID_CENTER.x, GRID_CENTER.y - 70, 80);
@@ -220,6 +232,7 @@ controls.target.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 controls.update();
 
 /**
+ * ====== TASK 12 ======
  * We now have the ground on our site, but we would also like to add buildings!
  * For our buildings, we will use the simple 2d grid described above, with the cell value representing the number of
  * floors for that cell.
@@ -238,6 +251,7 @@ const grid = new Grid();
 grid.setCellValue(5, 5, 5);
 
 /**
+ * ====== TASK 13 ======
  * Now it would be nice to draw the buildings in the Scene.
  *
  * We have created a class which takes in a grid and will create boxes for representing the buildings. However, the
@@ -283,6 +297,7 @@ function onmouseup(event: MouseEvent) {
 
   //calculateViewDistance(grid, true);
 
+  viewScores(grid);
   console.log(getAnalysisScore(grid));
 }
 
@@ -308,6 +323,7 @@ document.getElementById("search")?.addEventListener("click", () => {
     const candidate = sa.next();
     gridMesh.update(candidate.value);
     renderer.render(scene, camera);
+    viewScores(candidate.value);
     if (!candidate.done) {
       requestAnimationFrame(simulate);
     } else {

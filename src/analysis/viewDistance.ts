@@ -3,8 +3,8 @@ import { GRID_CELL_COUNT } from "../constants";
 
 const MAX = 8;
 
-export function calculateViewDistance(grid: Grid, print: boolean = false): number {
-  let scores = [];
+export function generateViewScoresPerApartment(grid: Grid, print: boolean) {
+  const scores: number[][][] = grid.array.map((row) => row.map((column) => [...Array(column)]));
   for (let x = 0; x < GRID_CELL_COUNT.x; x++) {
     for (let y = 0; y < GRID_CELL_COUNT.y; y++) {
       let east = 0;
@@ -54,9 +54,11 @@ export function calculateViewDistance(grid: Grid, print: boolean = false): numbe
           console.log(maxDistance);
         }
         if (maxDistance === 0) {
-          scores.push(-10);
+          scores[x][y][z - 1] = -10;
+          //scores.push(-10);
         } else {
-          scores.push(Math.min(1 - (MAX - maxDistance) / MAX, 1));
+          scores[x][y][z - 1] = Math.min(1 - (MAX - maxDistance) / MAX, 1);
+          //scores.push(Math.min(1 - (MAX - maxDistance) / MAX, 1));
         }
       }
 
@@ -71,10 +73,20 @@ export function calculateViewDistance(grid: Grid, print: boolean = false): numbe
   if (print) {
     console.log(scores);
   }
+  return scores;
+}
+
+export function calculateViewDistance(grid: Grid, print: boolean = false): number {
+  const scores = generateViewScoresPerApartment(grid, print);
 
   if (scores.length === 0) return 0;
 
   //return scores.reduce((prev, curr) => Math.min(prev, curr), scores[0]);
-
-  return scores.reduce((a, b) => a + b, 0) / scores.length;
+  if (scores.flat().flat().length === 0) return 0;
+  return (
+    scores
+      .flat()
+      .flat()
+      .reduce((a, b) => a + b, 0) / scores.flat().flat().length
+  );
 }
