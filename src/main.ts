@@ -63,6 +63,8 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * */
 
 //Your code here
+//const scene = ...
+//const camera = ...
 
 //camera.up = cameraUpAxis;
 //camera.position.copy(cameraInitialPosition);
