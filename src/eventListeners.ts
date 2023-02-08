@@ -1,0 +1,32 @@
+import Grid from "./Grid";
+import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
+import { viewScores } from "./viewScores";
+import { viewConstraints } from "./viewConstraints";
+import { constraintGrid } from "./constraint";
+import { IGridMesh } from "./GridMesh/GridMesh";
+import { Camera, Renderer, Scene } from "three";
+
+export function listenForButtonClicks(gridMesh: IGridMesh, renderer: Renderer, scene: Scene, camera: Camera, grid: Grid) {
+  document.getElementById("search")?.addEventListener("click", () => {
+    /*const fullGrid = new Grid();
+    fullGrid.full();*/
+    const emptyGrid = new Grid();
+    const sa = simulatedAnnealing(emptyGrid, 50_000, 10);
+    function simulate() {
+      const candidate = sa.next();
+      gridMesh.update(candidate.value);
+      renderer.render(scene, camera);
+      viewScores(candidate.value);
+      if (!candidate.done) {
+        requestAnimationFrame(simulate);
+      } else {
+        grid.decode(candidate.value.encode());
+      }
+    }
+    simulate();
+  });
+
+  document.getElementById("viewConstraints")?.addEventListener("click", () => {
+    viewConstraints(constraintGrid);
+  });
+}

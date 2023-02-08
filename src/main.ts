@@ -15,15 +15,12 @@ import {
   WebGLRenderer,
 } from "three";
 import Grid from "./Grid";
-import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
-import ConstraintMesh from "./GridMesh/ConstraintMesh";
-import { constraintGrid } from "./constraint";
 import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
 import { viewScores } from "./viewScores";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { viewConstraints } from "./viewConstraints";
+import { listenForButtonClicks } from "./eventListeners";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -268,6 +265,7 @@ const gridMesh = new GroupOfBoxes(grid);
 scene.add(gridMesh);
 
 /**
+ * ====== TASK 14 ======
  * Interacting with the scene
  *
  * Until now, we have only programmatically added things to the scene. To make a real tool, we need to allow the user
@@ -358,6 +356,7 @@ function worldCoordinatesToGridIndex(screenCoordinates: Vector3) {
 }
 
 /**
+ * ====== TASK 15 ======
  * It is a bit annoying that we add a box when we simply want to move the camera.
  *
  * Task:
@@ -390,33 +389,9 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
  *
  * */
 
-const constraintMesh = new ConstraintMesh(constraintGrid);
-scene.add(constraintMesh);
-
 // const loader = new GLTFLoader();
 // const fox = await loader.loadAsync("Fox.glb");
 //
 // scene.add(fox.scene);
 
-document.getElementById("search")?.addEventListener("click", () => {
-  const fullGrid = new Grid();
-  fullGrid.full();
-  const emptyGrid = new Grid();
-  const sa = simulatedAnnealing(fullGrid, 50_000, 10);
-  function simulate() {
-    const candidate = sa.next();
-    gridMesh.update(candidate.value);
-    renderer.render(scene, camera);
-    viewScores(candidate.value);
-    if (!candidate.done) {
-      requestAnimationFrame(simulate);
-    } else {
-      grid.decode(candidate.value.encode());
-    }
-  }
-  simulate();
-});
-
-document.getElementById("viewConstraints")?.addEventListener("click", () => {
-  viewConstraints(constraintGrid);
-});
+listenForButtonClicks(gridMesh, renderer, scene, camera, grid);
