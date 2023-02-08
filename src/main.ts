@@ -181,21 +181,36 @@ scene.add(ambientLight);
  *
  * Demo
  *
- * Let's start by adding the ground where the buildings can stand.
+ * Imagine we have a grid that has nxm cells, where each cell represents a spot where a building can be placed:
+ *
+ * +---+---+---+---+
+ * | o | o | o | o |
+ * +---+---+---+---+
+ * | o | o | o | o |
+ * +---+---+---+---+
+ * | o | o | o | o |
+ * +---+---+---+---+
+ * | o | o | o | o |
+ * +---+---+---+---+
+ *
+ * This is our site!
+ * Let's start by adding the ground on the site that the buildings can stand on top of.
+ * It needs to be as large as the size of the grid. The size of the grid can be found in the GRID_SIZE variable!
  *
  * Task:
- * - Create a PlaneGeometry
- * - Create a MeshLambertMaterial
+ * - Create a PlaneGeometry equal to the size of the grid.
+ * - Create a MeshLambertMaterial to make it react to lighting (give it a color if you'd like!)
  * - Create a mesh from the geometry and the material
- * - To make it easier to think about positioning on the ground, we want XY (0,0) to be in the bottom left corner
- *   of the ground. By default, a mesh's position is calculated from the middle of the mesh  ...blabla
+ *
  */
 
 const groundGeometry = new PlaneGeometry(GRID_SIZE.x, GRID_SIZE.y);
 const groundMaterial = new MeshLambertMaterial({ color: 0xaaaaaa });
 const groundMesh = new Mesh(groundGeometry, groundMaterial);
-groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 scene.add(groundMesh);
+
+//TODO: Separate task to set position to make positioning clearer and more understandable?
+groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 
 /**
  * It would be nice to have the camera looking in the middle of the
