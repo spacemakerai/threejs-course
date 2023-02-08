@@ -34,9 +34,6 @@ const cameraUpAxis = new Vector3(0, 0, 1);
 const cameraInitialPosition = new Vector3(-5, -5, 1);
 const cameraPointToLookAt = new Vector3(0, 0, 0);
 
-// TODO: Remove
-const NUMERIC_OFFSET = 1e-3;
-
 /**
  * First we need to get the html element we want to draw everything on ....
  * */
@@ -230,10 +227,14 @@ grid.setCellValue(5, 5, 5);
  * Task:
  * - Uncomment the two lines below
  * - Go into the GroupOfBoxes class and complete the implementation of the method "addBoxAtGridIndex"
+ * - Play around with setting different values in the Grid. Remember to call .update(grid) on the GroupOfBoxes class
+ *   after you edit the grid
  */
 
 const gridMesh = new GroupOfBoxes(grid);
 scene.add(gridMesh);
+
+/**  */
 
 //task7a();
 
@@ -282,8 +283,8 @@ function onmouseup(event: MouseEvent) {
 }
 
 function screenToGridCoordinates(screenCoordinates: Vector3) {
-  const x = Math.floor((screenCoordinates.x + NUMERIC_OFFSET) / CELL_SIZE.x);
-  const y = Math.floor((screenCoordinates.y + NUMERIC_OFFSET) / CELL_SIZE.y);
+  const x = Math.floor(screenCoordinates.x / CELL_SIZE.x);
+  const y = Math.floor(screenCoordinates.y / CELL_SIZE.y);
   return { x, y };
 }
 
