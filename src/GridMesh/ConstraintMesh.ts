@@ -2,14 +2,16 @@
  * Efficient implementation of the boxes mesh
  * */
 import { BufferAttribute, BufferGeometry, FrontSide, Group, Mesh, MeshLambertMaterial } from "three";
-import Grid, { CELL_SIZE, GRID_CELL_COUNT } from "../Grid";
+import Grid from "../Grid";
 import { getBoxGeometry } from "./GridMesh";
+import { CELL_SIZE, GRID_CELL_COUNT } from "../constants";
 
 export const BOX_MATERIAL = new MeshLambertMaterial({
   side: FrontSide,
   transparent: true,
   opacity: 0.2,
   color: 0xff0000,
+  wireframe: true,
 });
 
 export interface IGridMesh extends Group {

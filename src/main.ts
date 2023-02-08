@@ -3,6 +3,7 @@ import * as THREE from "three";
 import {
   AmbientLight,
   DirectionalLight,
+  DirectionalLightHelper,
   Mesh,
   MeshLambertMaterial,
   PerspectiveCamera,
@@ -11,7 +12,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three";
-import Grid, { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./Grid";
+import Grid from "./Grid";
 import { getAnalysisScore } from "./analysis";
 import { State } from "./state";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
@@ -19,10 +20,10 @@ import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 import { findClosestClickedObject } from "./raycasting";
 import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
-import { constraintGrid } from "./constraint";
-import ConstraintMesh from "./GridMesh/ConstraintMesh";
 import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
+import ConstraintMesh from "./GridMesh/ConstraintMesh";
+import { constraintGrid } from "./constraint";
+import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -42,6 +43,8 @@ const NUMERIC_OFFSET = 1e-3;
 const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasElement;
 
 /**
+ * ====== TASK 1 ======
+ *
  * The Scene is the...
  *
  * Docs:
@@ -55,6 +58,7 @@ camera.position.copy(cameraInitialPosition);
 camera.lookAt(cameraPointToLookAt);
 
 /**
+ * ====== TASK 2 ======
  * The WebGLRenderer is responsible for drawing the scene on the canvas, viewed from the cameras position
  *
  * Task:
@@ -152,9 +156,10 @@ material.color.set(0xffffff);
  * Tip: If you want to view where the light is placed, you can use add a new DirectionalLightHelper to the scene!
  */
 
-const directionalLight = new DirectionalLight(0xffffff, 0.7);
-directionalLight.position.set(-2, 0, 10);
+const directionalLight = new DirectionalLight(0xffffff, 0.9);
+directionalLight.position.set(-100, -20, 60);
 scene.add(directionalLight);
+scene.add(new DirectionalLightHelper(directionalLight));
 
 /**
  * The side of the cube that is in the shadow is completely black, making it hard to see anything.
@@ -201,12 +206,15 @@ controls.target.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 controls.update();
 
 /**
- * Grid time
+ * For our buildings, we will use a simple 2d grid, with the cell value representing the number of floors.
  *
- * Task: Create a grid using our provided Grid class, and try to use the functions exposed in it to set the number of
- * floors for a position of your choice. Check that it worked by console.log()ing the result.
+ * The size of the grid is defined in the file "constants.ts"
  *
- * - Add a builing to the grid, with grid.setCellValue(x, y, height)
+ * Task:
+ * - Create a grid using our provided Grid class
+ * - Use the functions Grid.setCellValue() and Grid.getCellValue() in it to set the number of floors for a position
+ *   of your choice.
+ * - Check that it worked by console.log()ing the result.
  */
 
 const grid = new Grid();
@@ -247,7 +255,7 @@ function onmouseup(event: MouseEvent) {
     return;
   }
   const normalizedCoordinates = calculateNormalizedDeviceCoordinates(event, canvas);
-  const closestIntersection = findClosestClickedObject(normalizedCoordinates, scene, camera);
+  const closestIntersection = findClosestClickedObject([gridMesh, groundMesh], normalizedCoordinates, camera);
   if (!closestIntersection) return;
   const { x, y } = screenToGridCoordinates(closestIntersection.point);
 

@@ -2,8 +2,9 @@
  * Efficient implementation of the boxes mesh
  * */
 import { BufferAttribute, BufferGeometry, Group, LineSegments, Mesh } from "three";
-import Grid, { CELL_SIZE, GRID_CELL_COUNT } from "../Grid";
+import Grid from "../Grid";
 import { BOX_MATERIAL, EDGES_MATERIAL } from "./GroupOfBoxes";
+import { CELL_SIZE, GRID_CELL_COUNT } from "../constants";
 
 export interface IGridMesh extends Group {
   update(grid: Grid): void;

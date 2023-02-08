@@ -1,5 +1,6 @@
-import Grid, { GRID_CELL_COUNT } from "../Grid";
+import Grid from "../Grid";
 import { getAnalysisScore, runAnalysis } from "../analysis";
+import { GRID_CELL_COUNT } from "../constants";
 
 function getNeighbour(grid: Grid) {
   const cloned = grid.clone();

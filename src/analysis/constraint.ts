@@ -1,5 +1,6 @@
-import Grid, { GRID_CELL_COUNT } from "../Grid";
+import Grid from "../Grid";
 import { constraintGrid } from "../constraint";
+import { GRID_CELL_COUNT } from "../constants";
 
 // Color all blocks according to legality
 export function constraintAnalysis(grid: Grid): number {

@@ -1,4 +1,5 @@
-import Grid, { GRID_CELL_COUNT } from "../Grid";
+import Grid from "../Grid";
+import { GRID_CELL_COUNT } from "../constants";
 
 const RATIO = 4;
 const DENSITY_TARGET = (GRID_CELL_COUNT.x * GRID_CELL_COUNT.y * GRID_CELL_COUNT.z) / RATIO;

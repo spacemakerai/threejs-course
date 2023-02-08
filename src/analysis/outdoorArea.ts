@@ -1,4 +1,5 @@
-import Grid, { GRID_CELL_COUNT } from "../Grid";
+import Grid from "../Grid";
+import { GRID_CELL_COUNT } from "../constants";
 
 export function getOutdoorAreaScore(grid: Grid) {
   const maxScore = GRID_CELL_COUNT.x * GRID_CELL_COUNT.y;

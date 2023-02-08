@@ -1,9 +1,9 @@
-import { Camera, Intersection, Mesh, Raycaster, Scene, Vector2 } from "three";
+import { Camera, Intersection, Mesh, Object3D, Raycaster, Vector2 } from "three";
 
 const raycaster = new Raycaster();
-export function findClosestClickedObject(mousePosition: Vector2, scene: Scene, camera: Camera) {
+export function findClosestClickedObject(racastTargets: Object3D[], mousePosition: Vector2, camera: Camera) {
   raycaster.setFromCamera(mousePosition, camera);
-  const intersections = raycaster.intersectObject(scene, true);
+  const intersections = raycaster.intersectObjects(racastTargets, true);
   const closestIntersection = intersections.find((i) => i.object instanceof Mesh);
   if (!closestIntersection) return;
   if (!closestIntersection.face) return;
