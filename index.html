@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
     <style>
-      body { margin: 0; }
+      body {
+        margin: 0;
+      }
     </style>
   </head>
   <body>
@@ -14,8 +16,6 @@
     <canvas id="app"></canvas>
     <canvas hidden id="export"></canvas>
     <div class="right">
-      <button id="search">Search for solution</button>
-      <button id="viewConstraints">View constraints</button>
       <div id="analysisScores">
         <h3>Analysis scores:</h3>
         <div>
@@ -34,13 +34,18 @@
           <span>Constraint:</span>
           <span id="constraint">0</span>
         </div>
-        <hr />
         <div>
-          <span>Total:</span>
+          <span><b>Total:</b></span>
           <span id="total">0</span>
         </div>
       </div>
+      <hr />
+      <div><button id="viewConstraints">View constraints</button></div>
+      <button id="search">Search for solution</button>
+      <div>
+        <button id="save">Save</button>
+        <button id="load">Load</button>
+      </div>
     </div>
-
   </body>
 </html>

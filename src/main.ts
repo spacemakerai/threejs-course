@@ -1,10 +1,11 @@
 import "./style.css";
-import * as THREE from "three";
 import {
   AmbientLight,
+  BoxGeometry,
   DirectionalLight,
   DirectionalLightHelper,
   Mesh,
+  MeshBasicMaterial,
   MeshLambertMaterial,
   PerspectiveCamera,
   PlaneGeometry,
@@ -32,17 +33,30 @@ const cameraInitialPosition = new Vector3(-5, -5, 1);
 const cameraPointToLookAt = new Vector3(0, 0, 0);
 
 /**
- * First we need to get the html element we want to draw everything on ....
+ * We have defined a <canvas> element in index.html.
+ * This is the element we want three.js to draw on. Here we fetch it from the HTML file:
  * */
 const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasElement;
 
 /**
  * ====== TASK 1 ======
  *
- * The Scene is the...
+ * Scenes allow you to set up what and where is to be rendered by three.js. This is where you place objects, lights and cameras.
+ * Let's set up one up!
+ *
+ * Task:
+ * - Create a new scene and assign it to a variable
+ * - Create a new PerspectiveCamera and assign it to a variable
+ * - Uncomment the lines where we initialize the camera to a position and an angle
+ *
+ * Hints:
+ * - All the parameters for setting up the camera are defined as variables above. You can play around with these
+ * later!
  *
  * Docs:
  * https://threejs.org/docs/#api/en/scenes/Scene
+ * https://threejs.org/docs/?q=perspec#api/en/cameras/PerspectiveCamera
+ *
  * */
 const scene = new Scene();
 const camera = new PerspectiveCamera(fov, aspectRatio, frustumNearPlane, frustumFarPlane);
@@ -57,7 +71,7 @@ camera.lookAt(cameraPointToLookAt);
  *
  * Task:
  * - Initialize the WebGLRenderer with the canvas
- * -
+ * - Call the render() function on the renderer!
  *
  * */
 
@@ -66,23 +80,30 @@ renderer.render(scene, camera);
 
 /**
  * ====== TASK 3 ======
- * WOHOO! ThreeJs is now responsible for drawing the canvas. Let's add some content!
+ * YAY! ThreeJs has taken over the drawing of the canvas – which you can see because the screen has turned black
+ * instead of red.
  *
- * Use the example to add a box
- * https://threejs.org/docs/index.html#api/en/geometries/BoxGeometry
+ * But a black screen isn't *that* much more interesting than a red one... Let's add something to look at!
+ *
+ * Task:
+ * - Use the example code from these docs to add a box to the scene
+ *   https://threejs.org/docs/index.html#api/en/geometries/BoxGeometry
+ * - Make sure to call the render() method on the renderer again to tell three.js to render what we have given it
  * */
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
+const geometry = new BoxGeometry(1, 1, 1);
+const material = new MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new Mesh(geometry, material);
 scene.add(cube);
 renderer.render(scene, camera);
 
 /**
  * ====== TASK 4 ======
- * Nice, we now have a cube, but it is so blurry!!
+ * Nice, we now have a cube, but it is so blurry!! We need to tell three.js what resolution we want things in.
  *
- * Task: Use the WebGlRenderer.setSize() to set the renderer size to match the canvas
+ * Task:
+ * - Use the setSize() method on the renderer to set the renderer size to match the canvas
+ * - (Did you remember to call render() again after changing the resolution?)
  *
  * Tip: The canvas size can be found as the properties canvas.clientWidth and canvas.clientHeight
  *
@@ -110,7 +131,7 @@ renderer.setClearColor("SkyBlue", 1);
  * Note:
  * This will draw the scene all the time. In production environments you most likely want to be smart about
  * when you actually call render(), to avoid rendering when there are no updates to the scene, to
- * save computation time for other
+ * save computation time for other important tasks.
  * */
 
 function animate() {
@@ -121,13 +142,15 @@ animate();
 
 /**
  * ====== TASK 6 ======
- * It would be nice to be able to move the camera around. This is a bit complicated, but luckily Three.js have an
- * example we can use out of the box which works well enough for this course. It can be added by new OrbitControls
+ * It would be nice to be able to move the camera around. This is a bit complicated, but luckily Three.js has an
+ * example we can use out of the box which works well enough for this course. It can be added by creating a
+ * "new OrbitControls()"
  *
  * OrbitControls work by taking in the camera and the canvas and listening to mouse events on the canvas to calculate
  * how far to move or rotate the camera – which it does by mutating properties on the passed-in camera.
  *
- * Task: Create new OrbitControls and assign it to a variable `controls` so we can reference it later.
+ * Task:
+ * - Create new OrbitControls and assign it to a variable `controls` so we can reference it later.
  * */
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -135,14 +158,15 @@ const controls = new OrbitControls(camera, renderer.domElement);
 /**
  * ====== TASK 7 ======
  * The cube is very green! Why don't we make it look slightly less jarring?
- * Task: Mutate the `color` property on the material to white.
+ * Task:
+ * - Mutate the `color` property on the material to white.
  * */
 
 material.color.set(0xffffff);
 
 /**
  * ====== TASK 8 ======
- * The shape of the box is just one big blob – that's because the mesh's material is not affected by lights and that
+ * The shape of the box is just one big blob – that's because the box's material is not affected by lights and that
  * we have no lights!
  *
  *
@@ -217,8 +241,8 @@ groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 /**
  * ====== TASK 11 ======
  * It would be nice to have the camera looking towards the middle of our site from the get-go.
- * To position the camera, you can use "camera.position.set()" and to make the camera angled towards something you can use
- * "controls.target.set()". Finally you must do a "controls.update()".
+ * To position the camera, you can use "camera.position.set()" and to make the camera angled towards something, you can
+ * use "controls.target.set()". Finally you must do a "controls.update()".
  * Task:
  * - Make the camera look at the center of the site
  */
@@ -325,11 +349,10 @@ function onmouseup(event: MouseEvent) {
   const { x, y } = worldCoordinatesToGridIndex(closest.point);
 
   const currentValue = grid.getCellValue(x, y);
-  grid.setCellValue(x, y, currentValue + (event.shiftKey ? -1 : 1));
+  grid.setCellValue(x, y, Math.max(currentValue + (event.shiftKey ? -1 : 1), 0));
   gridMesh.update(grid);
 
   viewScores(grid);
-  //State.save(grid);
 }
 
 /**

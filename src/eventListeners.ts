@@ -5,6 +5,7 @@ import { viewConstraints } from "./viewConstraints";
 import { constraintGrid } from "./constraint";
 import { IGridMesh } from "./GridMesh/GridMesh";
 import { Camera, Renderer, Scene } from "three";
+import { State } from "./state";
 
 export function listenForButtonClicks(gridMesh: IGridMesh, renderer: Renderer, scene: Scene, camera: Camera, grid: Grid) {
   document.getElementById("search")?.addEventListener("click", () => {
@@ -28,5 +29,15 @@ export function listenForButtonClicks(gridMesh: IGridMesh, renderer: Renderer, s
 
   document.getElementById("viewConstraints")?.addEventListener("click", () => {
     viewConstraints(constraintGrid);
+  });
+
+  document.getElementById("save")?.addEventListener("click", () => {
+    State.save(grid);
+  });
+
+  document.getElementById("load")?.addEventListener("click", () => {
+    State.load(grid);
+    gridMesh.update(grid);
+    viewScores(grid);
   });
 }
