@@ -1,4 +1,5 @@
 import "./style.css";
+import "./featureFlag";
 import {
   AmbientLight,
   BoxGeometry,
@@ -261,7 +262,7 @@ controls.update();
  * Separating our domain model and the visual rendering is important when the application grow.
  *
  * Task:
- * - Create a grid using our provided Grid class
+ * - Create a grid using our provided Grid class and assign it to a variable `grid`
  * - Use the functions Grid.setCellValue() and Grid.getCellValue() in it to set the number of floors for a position
  *   of your choice.
  * - Check that it worked by console.log()ing the result.
