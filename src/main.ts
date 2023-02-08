@@ -8,16 +8,13 @@ import {
   MeshLambertMaterial,
   PerspectiveCamera,
   PlaneGeometry,
+  Raycaster,
   Scene,
+  Vector2,
   Vector3,
   WebGLRenderer,
 } from "three";
 import Grid from "./Grid";
-import { getAnalysisScore } from "./analysis";
-import { State } from "./state";
-import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
-
-import { findClosestClickedObject } from "./raycasting";
 import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
@@ -232,6 +229,7 @@ controls.update();
 
 const grid = new Grid();
 grid.setCellValue(5, 5, 5);
+grid.setCellValue(5, 7, 4);
 
 /**
  * Now it would be nice to draw the buildings in the Scene.
@@ -249,69 +247,116 @@ grid.setCellValue(5, 5, 5);
 const gridMesh = new GroupOfBoxes(grid);
 scene.add(gridMesh);
 
-/**  */
+/**
+ * Interacting with the scene
+ *
+ * Until now, we have only programmatically added things to the scene. To make a real tool, we need to allow the user
+ * to draw the buildings where they want.
+ *
+ * We want to capture add or remove a floor when the user clicks somewhere on the map.
+ *
+ * Docs: https://threejs.org/docs/#api/en/core/Raycaster
+ *
+ * Task:
+ * - Use the function findPositionInCanvas to get the canvas x,y coordinates
+ * - Create a Raycaster
+ * - Set the Raycaster position using the Raycaster.setFromCamera() function
+ * - Use the function Raycaster.intersectObjects() to intersect with the Ground and the GroupOfBoxes. This function
+ *   returns a list of intersections, sorted from closest to the camera to furthest away from the camera
+ * - Check if we got any intersections, if yes, get the first one
+ * - Use the function worldCoordinatesToGridIndex(intersection.point) to map this coordinate to grid index
+ * - Get the current number of floors for the given grid cell
+ * - Set the number of floors for the given cell to one more than before
+ * - Update the GroupOfBoxes to see the result
+ *
+ * You should now be able to draw new boxes!!!
+ *
+ * Task: Let the user remove them as well
+ * - Check if the shiftKey is pressed while clicking (this can be found on event.shiftKey)
+ * - If shift is pressed, subtract one from the current value
+ *
+ *
+ * Hint:
+ * - Throughout this task, it can be really useful to console.log the variables and test your code in the browser
+ *
+ * */
 
-//task7a();
-
-/** extra task todo
- * The edges of the cube are not pretty. This is due to aliasing
- */
-// function task900() {
-//   gridMesh = new GridMesh();
-//   gridMesh.update(grid);
-// }
-// task900();
-
-function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boolean {
-  if (!down) return false;
-  const distSq = (down.offsetX - up.offsetX) ** 2 + (down.offsetY - up.offsetY) ** 2;
-  return distSq > 4 ** 2;
-}
-
-// const sa = new SimulatedAnnealing(new Grid());
-// sa.run();
-//
-// grid.decode(sa.grid.encode());
-// gridMesh.update();
+canvas.addEventListener("mouseup", onmouseup);
 
 function onmouseup(event: MouseEvent) {
-  if (movedWhileClicking(mousedownEvent, event)) {
-    //We don't want to add apartments if the user only wanted to move the camera
+  const positionInCanvas = findPositionInCanvas(event, canvas);
+
+  // We check if the mouse moved between the mousedown and mouse up events.
+  // We don't want to add apartments if the user only wanted to move the camera
+  // if (movedWhileClicking(mouseDownPosition, normalizedCoordinates)) {
+  //   return;
+  // }
+
+  const raycaster = new Raycaster();
+  raycaster.setFromCamera(positionInCanvas, camera);
+
+  const intersections = raycaster.intersectObjects([groundMesh, gridMesh]);
+  if (intersections.length === 0) {
+    // We didn't hit anything in the scene
     return;
   }
-  const normalizedCoordinates = calculateNormalizedDeviceCoordinates(event, canvas);
-  const closestIntersection = findClosestClickedObject([gridMesh, groundMesh], normalizedCoordinates, camera);
-  if (!closestIntersection) return;
-  const { x, y } = screenToGridCoordinates(closestIntersection.point);
 
-  const diff = event.shiftKey ? -1 : 1;
-  const prevVal = grid.getCellValue(x, y);
-  const newVal = prevVal + diff;
+  const closest = intersections[0];
 
-  grid.setCellValue(x, y, newVal);
-  State.save(grid);
+  const { x, y } = worldCoordinatesToGridIndex(closest.point);
+
+  const currentValue = grid.getCellValue(x, y);
+  grid.setCellValue(x, y, currentValue + (event.shiftKey ? -1 : 1));
   gridMesh.update(grid);
 
-  //calculateViewDistance(grid, true);
-
-  console.log(getAnalysisScore(grid));
+  //State.save(grid);
 }
 
-function screenToGridCoordinates(screenCoordinates: Vector3) {
+/**
+ * Normalized device coordinate or NDC space is a screen independent display coordinate system;
+ * it encompasses a square where the x and y components range from 0 to 1.
+ *
+ *  |⎻⎻⎻⎻1
+ *  |    |
+ *  |    |
+ *  0____|
+ *
+ */
+
+export function findPositionInCanvas(event: MouseEvent, canvas: HTMLCanvasElement): Vector2 {
+  let x = (event.offsetX / canvas.clientWidth) * 2 - 1;
+  let y = -(event.offsetY / canvas.clientHeight) * 2 + 1;
+  return new Vector2(x, y);
+}
+
+function worldCoordinatesToGridIndex(screenCoordinates: Vector3) {
   const x = Math.floor(screenCoordinates.x / CELL_SIZE.x);
   const y = Math.floor(screenCoordinates.y / CELL_SIZE.y);
   return { x, y };
 }
 
-function onmousedown(event: MouseEvent) {
-  mousedownEvent = event;
+/**
+ * It is a bit annoying that we add a box when we simply want to move the camera.
+ *
+ * Task:
+ * - Add a check to the onmouseup function which quits the function if the camera has moved while the mouse was down
+ *
+ * Hint:
+ * - We already record the canvas position in the variable "mouseDownPositionInCanvas" when mouse is clicked down
+ * - The function "movedWhileClicking" can be used to check the distance the mouse has moved
+ * */
+
+let mouseDownPositionInCanvas: Vector2;
+canvas.addEventListener("mousedown", (event: MouseEvent) => {
+  mouseDownPositionInCanvas = findPositionInCanvas(event, canvas);
+});
+
+function movedWhileClicking(down: Vector2, up: Vector2): boolean {
+  return Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2) > 4;
 }
+
 const constraintMesh = new ConstraintMesh(constraintGrid);
 scene.add(constraintMesh);
-
-let mousedownEvent: MouseEvent | undefined;
-window.addEventListener("mouseup", onmouseup);
-window.addEventListener("mousedown", onmousedown);
 
 document.getElementById("search")?.addEventListener("click", () => {
   const sa = simulatedAnnealing(new Grid(), 50_000, 10);
