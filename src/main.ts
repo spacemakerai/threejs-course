@@ -22,6 +22,7 @@ import ConstraintMesh from "./GridMesh/ConstraintMesh";
 import { constraintGrid } from "./constraint";
 import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
 import { viewScores } from "./viewScores";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -390,6 +391,11 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
 
 const constraintMesh = new ConstraintMesh(constraintGrid);
 scene.add(constraintMesh);
+
+// const loader = new GLTFLoader();
+// const fox = await loader.loadAsync("Fox.glb");
+//
+// scene.add(fox.scene);
 
 document.getElementById("search")?.addEventListener("click", () => {
   const sa = simulatedAnnealing(new Grid(), 50_000, 10);
