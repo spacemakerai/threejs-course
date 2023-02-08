@@ -13,6 +13,10 @@ export default class Grid {
     this.array = Array.from(Array(GRID_CELL_COUNT.x)).map((_) => Array.from(Array(GRID_CELL_COUNT.y)).map((_) => 0));
   }
 
+  full() {
+    this.array = Array.from(Array(GRID_CELL_COUNT.x)).map((_) => Array.from(Array(GRID_CELL_COUNT.y)).map((_) => 6));
+  }
+
   diff(x: number, y: number, diff: number) {
     const currentVal = this.array[x][y];
     let newVal = currentVal + diff;
