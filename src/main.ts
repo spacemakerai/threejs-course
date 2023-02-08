@@ -210,7 +210,9 @@ scene.add(groundMesh);
 groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 
 /**
- * It would be nice to have the camera looking in the middle of the
+ * It would be nice to have the camera looking towards the middle of our site from the get-go.
+ * To position the camera, you can use "camera.position.set()" and to make the camera angled towards something you can use
+ * "controls.target.set()". Finally you must do a "controls.update()".
  */
 
 camera.position.set(GRID_CENTER.x, GRID_CENTER.y - 70, 80);
@@ -218,7 +220,9 @@ controls.target.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 controls.update();
 
 /**
- * For our buildings, we will use a simple 2d grid, with the cell value representing the number of floors.
+ * We now have the ground on our site, but we would also like to add buildings!
+ * For our buildings, we will use the simple 2d grid described above, with the cell value representing the number of
+ * floors for that cell.
  *
  * This is our domain model, a pure Javascript/Typescript object which does not have anything with Three.js to do.
  * Separating our domain model and the visual rendering is important when the application grow.
@@ -249,30 +253,15 @@ grid.setCellValue(5, 5, 5);
 const gridMesh = new GroupOfBoxes(grid);
 scene.add(gridMesh);
 
-/**  */
-
-//task7a();
-
 /** extra task todo
  * The edges of the cube are not pretty. This is due to aliasing
  */
-// function task900() {
-//   gridMesh = new GridMesh();
-//   gridMesh.update(grid);
-// }
-// task900();
 
 function movedWhileClicking(down: MouseEvent | undefined, up: MouseEvent): boolean {
   if (!down) return false;
   const distSq = (down.offsetX - up.offsetX) ** 2 + (down.offsetY - up.offsetY) ** 2;
   return distSq > 4 ** 2;
 }
-
-// const sa = new SimulatedAnnealing(new Grid());
-// sa.run();
-//
-// grid.decode(sa.grid.encode());
-// gridMesh.update();
 
 function onmouseup(event: MouseEvent) {
   if (movedWhileClicking(mousedownEvent, event)) {
