@@ -23,6 +23,7 @@ import { constraintGrid } from "./constraint";
 import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
 import { viewScores } from "./viewScores";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { viewConstraints } from "./viewConstraints";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -411,4 +412,8 @@ document.getElementById("search")?.addEventListener("click", () => {
     }
   }
   simulate();
+});
+
+document.getElementById("viewConstraints")?.addEventListener("click", () => {
+  viewConstraints(constraintGrid);
 });
