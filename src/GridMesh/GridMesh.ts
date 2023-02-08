@@ -66,7 +66,7 @@ export default class GridMesh extends Group implements IGridMesh {
  *  x0y0.........x1y0
  *
  * */
-function getBoxGeometry(x0: number, y0: number, y1: number, x1: number, height: number) {
+export function getBoxGeometry(x0: number, y0: number, y1: number, x1: number, height: number) {
   const positions: [number, number, number][] = [];
   // Bottom face
   positions.push(

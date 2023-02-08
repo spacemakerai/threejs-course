@@ -1,6 +1,6 @@
 import Grid, { GRID_DEPTH, GRID_HEIGHT, GRID_WIDTH } from "../Grid";
 
-const RATIO = 2;
+const RATIO = 4;
 const DENSITY_TARGET = (GRID_WIDTH * GRID_DEPTH * GRID_HEIGHT) / RATIO;
 
 export function calculateApartmentCount(grid: Grid): number {

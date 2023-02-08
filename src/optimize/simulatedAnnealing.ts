@@ -32,7 +32,7 @@ export function* simulatedAnnealing(grid: Grid, MAX_ITER = 1_000, NO_PRINTS = 10
   let best = current;
   let bestScore = getAnalysisScore(current);
 
-  let temp = 0.001;
+  let temp = 0.0003;
   const alpha = temp / MAX_ITER;
 
   for (let i = 0; i < MAX_ITER; i++) {

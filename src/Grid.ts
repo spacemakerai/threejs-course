@@ -5,7 +5,7 @@ export const CELL_HEIGHT = 3;
 
 export const GRID_WIDTH = 20;
 export const GRID_DEPTH = 20;
-export const GRID_HEIGHT = 5;
+export const GRID_HEIGHT = 10;
 
 export default class Grid {
   array: number[][] = [];

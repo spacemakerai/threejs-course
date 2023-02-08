@@ -17,10 +17,11 @@ import { State } from "./state";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 
 import { findClosestClickedObject } from "./raycasting";
-import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
 import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import GridMesh from "./GridMesh/GridMesh";
+import { constraintGrid } from "./constraint";
+import ConstraintMesh from "./GridMesh/ConstraintMesh";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -271,13 +272,15 @@ function screenToGridCoordinates(screenCoordinates: Vector3) {
 function onmousedown(event: MouseEvent) {
   mousedownEvent = event;
 }
+const constraintMesh = new ConstraintMesh(constraintGrid);
+scene.add(constraintMesh);
 
 let mousedownEvent: MouseEvent | undefined;
 window.addEventListener("mouseup", onmouseup);
 window.addEventListener("mousedown", onmousedown);
 
 document.getElementById("search")?.addEventListener("click", () => {
-  const sa = simulatedAnnealing(new Grid(), 100_000, 10);
+  const sa = simulatedAnnealing(new Grid(), 50_000, 10);
   function simulate() {
     const candidate = sa.next();
     gridMesh.update(candidate.value);
