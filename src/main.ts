@@ -295,6 +295,7 @@ scene.add(gridMesh);
  *
  *
  * Hint:
+ * - We have already implemented the functions "findPositionInCanvas" and "worldCoordinatesToGridIndex" below
  * - Throughout this task, it can be really useful to console.log the variables and test your code in the browser
  *
  * */
@@ -373,6 +374,19 @@ canvas.addEventListener("mousedown", (event: MouseEvent) => {
 function movedWhileClicking(down: Vector2, up: Vector2): boolean {
   return Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2) > 4;
 }
+
+/**
+ * Extra tasks for the fast ones!
+ *
+ * 1. Drawing many meshes is not good for performance! Our class GroupOfBoxes have one mesh per cell in the grid.
+ *    In a production environment, we typically create the geometry manually instead of using helpers like
+ *    BoxGeometry. This enables us to create whatever mesh we want, as well as merge lots of shapes into the same
+ *    mesh.
+ *
+ *    Task: Switch out the usage of GroupOfBoxes with GridMesh. Their interface is identical. As you can see, we forgot
+ *    to add the left face of the boxes. Fill in the missing code to draw the left face of the boxes
+ *
+ * */
 
 const constraintMesh = new ConstraintMesh(constraintGrid);
 scene.add(constraintMesh);
