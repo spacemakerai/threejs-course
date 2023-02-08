@@ -93,7 +93,7 @@ renderer.render(scene, camera);
  * */
 
 const geometry = new BoxGeometry(1, 1, 1);
-const material = new MeshBasicMaterial({ color: 0x00ff00 });
+const material = new MeshLambertMaterial({ color: 0x00ff00 });
 const cube = new Mesh(geometry, material);
 scene.add(cube);
 renderer.render(scene, camera);

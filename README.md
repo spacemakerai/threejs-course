@@ -17,6 +17,9 @@ You will need the following installed:
 2. In a terminal, navigate to the downloaded folder and run `yarn install`
 3. To run the code and make it listen to changes, run `yarn dev`
 
+Open the URL that is printed to your terminal to open the webpage.
+If you're seeing a completely red canvas, you're set to begin!
+
 ## What now?
 
 Navigate to `src/main.ts` and scroll down to "TASK 1" and follow the instructions!
