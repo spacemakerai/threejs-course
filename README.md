@@ -1,61 +1,24 @@
-# TODOs
+# Introduction to three.js
 
-- Make analysis
-  - sensible score
-  - turn on/off
-- Clean up rendering/camera
-- Make basic example
-  - Built in geometry
-- Add boxes programatically
-- onClick, split up nicely
-- Find the flow
-- Search algo
+![Spacemaker three logo](public/spacemakerthree.jpg)
 
-- Write efficient gridMesh
-- Rewrite grid to be x * y * height
+## Getting started
 
+### Prerequisites
 
-### Outline
+You will need the following installed:
 
-#### Intro
+- node.js [Installation guide](https://nodejs.org/en/)
+- A code editor of your choice
 
-- Spacemaker value prop 
+### Running the code
 
-#### Part 1
+1. Download the repository, either by `git clone git@github.com:spacemakerai/threejs-course.git` or by downloading the ZIP.
+2. In a terminal, navigate to the downloaded folder and run `yarn install`
+3. To run the code and make it listen to changes, run `yarn dev`
 
-- What is threejs?
-- The scene
-- Camera
-- Renderer
-- OrbitControls
-- Simple built in geometries
+## What now?
 
-#### Part 2
+Navigate to `src/main.ts` and scroll down to "TASK 1" and follow the instructions!
 
-- Adding the ground
-- 
-
-#### Competition 1
-
-- Design the best plot
-
-
-#### Competition 2
-
-- Design the best plot with analysis toggled
-
-#### Rendering
-
-- Textures
-- Shader
-
-
-### Analyses
-
-- Outdoor area
-  - Connected something
-- View distance (sum distances in 4 directions)
-  - Apartments must have facade (punish hard!)
-- Sun raycasting
-
-
+Good luck!
