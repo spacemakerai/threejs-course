@@ -72,6 +72,8 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * ====== TASK 2 ======
  * The WebGLRenderer is responsible for drawing the scene on the canvas, viewed from the cameras position
  *
+ * Docs: https://threejs.org/docs/?q=web#api/en/renderers/WebGLRenderer
+ *
  * Task:
  * - Initialize the WebGLRenderer with the canvas
  * - Call the render() function on the renderer!
@@ -132,7 +134,11 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * save computation time for other important tasks.
  * */
 
-//Your code here
+function animate() {
+  //Your code here
+  requestAnimationFrame(animate);
+}
+animate();
 
 /**
  * ====== TASK 6 ======
@@ -145,6 +151,9 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * Task:
  * - Create new OrbitControls and assign it to a variable `controls` so we can reference it later.
+ *   Pass it the canvas we defined above as the domElement.
+ *
+ * Docs: https://threejs.org/docs/?q=orbit#examples/en/controls/OrbitControls
  * */
 
 //Your code here
@@ -153,7 +162,9 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * ====== TASK 7 ======
  * The cube is very green! Why don't we make it look slightly less jarring?
  * Task:
- * - Mutate the `color` property on the material to white.
+ * - Mutate the `color` property on the material to "white".
+ *
+ * Docs: https://threejs.org/docs/index.html?q=meshb#api/en/materials/MeshBasicMaterial.color
  * */
 
 //Your code here
@@ -172,6 +183,11 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * We suggest using an intensity of 0.7
  * Tip: If you want to view where the light is placed, you can add a new DirectionalLightHelper to the scene!
+ *
+ * Docs:
+ * https://threejs.org/docs/index.html?q=meshb#api/en/materials/MeshBasicMaterial
+ * https://threejs.org/docs/index.html#api/en/materials/MeshLambertMaterial
+ * https://threejs.org/docs/index.html?q=direct#api/en/lights/DirectionalLight
  */
 
 //Your code here
@@ -187,6 +203,7 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * We suggest using an intensity of 0.4
  *
+ * Docs: https://threejs.org/docs/index.html#api/en/lights/AmbientLight
  * */
 
 //Your code here
@@ -218,6 +235,9 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * - Create a MeshLambertMaterial to make it react to lighting (give it a color if you'd like!)
  * - Create a mesh from the geometry and the material
  *
+ * Docs:
+ * https://threejs.org/docs/index.html?q=Plane#api/en/geometries/PlaneGeometry
+ * https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh
  */
 
 //Your code here
@@ -234,6 +254,12 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * - Make the camera look at the center of the site
  *
  * Tip: The center of the grid is defined in the GRID_CENTER constant
+ *
+ * Docs:
+ * https://threejs.org/docs/index.html?q=orbitc#examples/en/controls/OrbitControls.target
+ * https://threejs.org/docs/index.html?q=orbitc#examples/en/controls/OrbitControls.update
+ * https://threejs.org/docs/index.html?q=object#api/en/core/Object3D.position
+ *
  */
 
 //Your code here
