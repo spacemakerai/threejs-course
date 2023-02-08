@@ -11,7 +11,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three";
-import Grid, { CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "./Grid";
+import Grid, { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./Grid";
 import { getAnalysisScore } from "./analysis";
 import { State } from "./state";
 import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
@@ -19,9 +19,10 @@ import { calculateNormalizedDeviceCoordinates } from "./mousePosition";
 import { findClosestClickedObject } from "./raycasting";
 import { simulatedAnnealing } from "./optimize/simulatedAnnealing";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import GridMesh from "./GridMesh/GridMesh";
+
 import { constraintGrid } from "./constraint";
 import ConstraintMesh from "./GridMesh/ConstraintMesh";
+import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
 
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
@@ -185,18 +186,18 @@ scene.add(ambientLight);
  *   of the ground. By default, a mesh's position is calculated from the middle of the mesh  ...blabla
  */
 
-const groundGeometry = new PlaneGeometry(GRID_WIDTH * CELL_WIDTH_DEPTH, GRID_DEPTH * CELL_WIDTH_DEPTH);
+const groundGeometry = new PlaneGeometry(GRID_SIZE.x, GRID_SIZE.y);
 const groundMaterial = new MeshLambertMaterial({ color: 0xaaaaaa });
 const groundMesh = new Mesh(groundGeometry, groundMaterial);
-groundMesh.position.set((GRID_WIDTH * CELL_WIDTH_DEPTH) / 2, (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2, 0);
+groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 scene.add(groundMesh);
 
 /**
  * It would be nice to have the camera looking in the middle of the
  */
 
-camera.position.set(Grid.center.x, Grid.center.y - 70, 80);
-controls.target.set(Grid.center.x, Grid.center.y, 0);
+camera.position.set(GRID_CENTER.x, GRID_CENTER.y - 70, 80);
+controls.target.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 controls.update();
 
 /**
@@ -214,7 +215,7 @@ grid.setCellValue(5, 5, 5);
 /**
  * Create the mesh and add it to the scene
  */
-const gridMesh = new GridMesh(grid);
+const gridMesh = new GroupOfBoxes(grid);
 scene.add(gridMesh);
 
 //task7a();
@@ -264,8 +265,8 @@ function onmouseup(event: MouseEvent) {
 }
 
 function screenToGridCoordinates(screenCoordinates: Vector3) {
-  const x = Math.floor((screenCoordinates.x + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
-  const y = Math.floor((screenCoordinates.y + NUMERIC_OFFSET) / CELL_WIDTH_DEPTH);
+  const x = Math.floor((screenCoordinates.x + NUMERIC_OFFSET) / CELL_SIZE.x);
+  const y = Math.floor((screenCoordinates.y + NUMERIC_OFFSET) / CELL_SIZE.y);
   return { x, y };
 }
 

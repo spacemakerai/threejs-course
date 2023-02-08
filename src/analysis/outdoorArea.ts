@@ -1,12 +1,12 @@
-import Grid, { GRID_DEPTH, GRID_WIDTH } from "../Grid";
+import Grid, { GRID_CELL_COUNT } from "../Grid";
 
 export function getOutdoorAreaScore(grid: Grid) {
-  const maxScore = GRID_WIDTH * GRID_DEPTH;
+  const maxScore = GRID_CELL_COUNT.x * GRID_CELL_COUNT.y;
   const targetScore = maxScore / 3;
 
   let sum = 0;
-  for (let x = 1; x < GRID_WIDTH - 1; x++) {
-    for (let y = 1; y < GRID_DEPTH - 1; y++) {
+  for (let x = 1; x < GRID_CELL_COUNT.x - 1; x++) {
+    for (let y = 1; y < GRID_CELL_COUNT.y - 1; y++) {
       const cells = [
         [x - 1, y - 1],
         [x, y - 1],
@@ -27,10 +27,10 @@ export function getOutdoorAreaScore(grid: Grid) {
 }
 
 export function getOutdoorAreaSimple(grid: Grid) {
-  const maxScore = GRID_WIDTH * GRID_DEPTH;
+  const maxScore = GRID_CELL_COUNT.x * GRID_CELL_COUNT.y;
   let sum = 0;
-  for (let x = 0; x < GRID_WIDTH; x++) {
-    for (let y = 0; y < GRID_DEPTH; y++) {
+  for (let x = 0; x < GRID_CELL_COUNT.x; x++) {
+    for (let y = 0; y < GRID_CELL_COUNT.y; y++) {
       if (grid.getCellValue(x, y) === 0) {
         sum++;
       }

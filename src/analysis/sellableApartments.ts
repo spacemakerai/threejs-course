@@ -1,7 +1,7 @@
-import Grid, { GRID_DEPTH, GRID_HEIGHT, GRID_WIDTH } from "../Grid";
+import Grid, { GRID_CELL_COUNT } from "../Grid";
 
 const RATIO = 4;
-const DENSITY_TARGET = (GRID_WIDTH * GRID_DEPTH * GRID_HEIGHT) / RATIO;
+const DENSITY_TARGET = (GRID_CELL_COUNT.x * GRID_CELL_COUNT.y * GRID_CELL_COUNT.z) / RATIO;
 
 export function calculateApartmentCount(grid: Grid): number {
   const count = grid.array.reduce((sum, _grid) => {

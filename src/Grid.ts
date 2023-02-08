@@ -1,28 +1,26 @@
-import { Vector2 } from "three";
+import { Vector2, Vector3 } from "three";
 
-export const CELL_WIDTH_DEPTH = 6;
-export const CELL_HEIGHT = 3;
+export const CELL_SIZE = new Vector3(6, 6, 3);
+export const GRID_CELL_COUNT = new Vector3(20, 20, 10);
+export const GRID_SIZE = new Vector3().multiplyVectors(CELL_SIZE, GRID_CELL_COUNT);
 
-export const GRID_WIDTH = 20;
-export const GRID_DEPTH = 20;
-export const GRID_HEIGHT = 10;
+export const GRID_CENTER = new Vector2(GRID_SIZE.x / 2, GRID_SIZE.y / 2);
 
 export default class Grid {
   array: number[][] = [];
-  static center = new Vector2((GRID_WIDTH * CELL_WIDTH_DEPTH) / 2, (GRID_DEPTH * CELL_WIDTH_DEPTH) / 2);
 
   constructor() {
     this.empty();
   }
 
   empty() {
-    this.array = Array.from(Array(GRID_WIDTH)).map((_) => Array.from(Array(GRID_DEPTH)).map((_) => 0));
+    this.array = Array.from(Array(GRID_CELL_COUNT.x)).map((_) => Array.from(Array(GRID_CELL_COUNT.y)).map((_) => 0));
   }
 
   diff(x: number, y: number, diff: number) {
     const currentVal = this.array[x][y];
     let newVal = currentVal + diff;
-    newVal = Math.min(newVal, GRID_HEIGHT);
+    newVal = Math.min(newVal, GRID_CELL_COUNT.z);
     newVal = Math.max(newVal, 0);
     this.array[x][y] = newVal;
   }

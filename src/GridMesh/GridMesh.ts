@@ -2,7 +2,7 @@
  * Efficient implementation of the boxes mesh
  * */
 import { BufferAttribute, BufferGeometry, Group, LineSegments, Mesh } from "three";
-import Grid, { CELL_HEIGHT, CELL_WIDTH_DEPTH, GRID_DEPTH, GRID_WIDTH } from "../Grid";
+import Grid, { CELL_SIZE, GRID_CELL_COUNT } from "../Grid";
 import { BOX_MATERIAL, EDGES_MATERIAL } from "./GroupOfBoxes";
 
 export interface IGridMesh extends Group {
@@ -26,17 +26,17 @@ export default class GridMesh extends Group implements IGridMesh {
     const meshPositions: [number, number, number][] = [];
     const lineSegmentsPositions: [number, number, number][] = [];
 
-    for (let x = 0; x < GRID_WIDTH; x++) {
-      for (let y = 0; y < GRID_DEPTH; y++) {
+    for (let x = 0; x < GRID_CELL_COUNT.x; x++) {
+      for (let y = 0; y < GRID_CELL_COUNT.y; y++) {
         const floors = grid.getCellValue(x, y);
         if (floors === 0) continue;
 
-        const height = floors * CELL_HEIGHT;
+        const height = floors * CELL_SIZE.z;
 
-        const x0 = x * CELL_WIDTH_DEPTH;
-        const x1 = x * CELL_WIDTH_DEPTH + CELL_WIDTH_DEPTH;
-        const y0 = y * CELL_WIDTH_DEPTH;
-        const y1 = y * CELL_WIDTH_DEPTH + CELL_WIDTH_DEPTH;
+        const x0 = x * CELL_SIZE.x;
+        const x1 = x * CELL_SIZE.x + CELL_SIZE.x;
+        const y0 = y * CELL_SIZE.y;
+        const y1 = y * CELL_SIZE.y + CELL_SIZE.y;
 
         meshPositions.push(...getBoxGeometry(x0, y0, y1, x1, height));
         lineSegmentsPositions.push(...getLineSegments(x0, y0, y1, x1, height));
@@ -141,7 +141,7 @@ export function getBoxGeometry(x0: number, y0: number, y1: number, x1: number, h
 function getLineSegments(x0: number, y0: number, y1: number, x1: number, height: number) {
   const positions: [number, number, number][] = [];
 
-  for (let z = 0; z <= height; z += CELL_HEIGHT) {
+  for (let z = 0; z <= height; z += CELL_SIZE.z) {
     // Front
     positions.push([x0, y0, z], [x1, y0, z]);
     // Right

@@ -1,4 +1,4 @@
-import Grid, { GRID_DEPTH, GRID_WIDTH } from "../Grid";
+import Grid, { GRID_CELL_COUNT } from "../Grid";
 import { getAnalysisScore, runAnalysis } from "../analysis";
 
 function getNeighbour(grid: Grid) {
@@ -6,16 +6,16 @@ function getNeighbour(grid: Grid) {
 
   for (let i = 0; i < 5; i++) {
     if (Math.random() < 0.5) {
-      const x = getRandomInt(0, GRID_WIDTH);
-      const y = getRandomInt(0, GRID_DEPTH);
+      const x = getRandomInt(0, GRID_CELL_COUNT.x);
+      const y = getRandomInt(0, GRID_CELL_COUNT.y);
       const diff = getRandomInt(-1, 2);
       cloned.diff(x, y, diff);
     } else {
-      const x0 = getRandomInt(0, GRID_WIDTH);
-      const y0 = getRandomInt(0, GRID_DEPTH);
+      const x0 = getRandomInt(0, GRID_CELL_COUNT.x);
+      const y0 = getRandomInt(0, GRID_CELL_COUNT.y);
 
-      const x1 = getRandomInt(0, GRID_WIDTH);
-      const y1 = getRandomInt(0, GRID_DEPTH);
+      const x1 = getRandomInt(0, GRID_CELL_COUNT.x);
+      const y1 = getRandomInt(0, GRID_CELL_COUNT.y);
 
       const v0 = cloned.getCellValue(x0, y0);
       const v1 = cloned.getCellValue(x1, y1);

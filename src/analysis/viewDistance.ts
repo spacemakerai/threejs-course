@@ -1,11 +1,11 @@
-import Grid, { GRID_DEPTH, GRID_WIDTH } from "../Grid";
+import Grid, { GRID_CELL_COUNT } from "../Grid";
 
 const MAX = 8;
 
 export function calculateViewDistance(grid: Grid, print: boolean = false): number {
   let scores = [];
-  for (let x = 0; x < GRID_WIDTH; x++) {
-    for (let y = 0; y < GRID_DEPTH; y++) {
+  for (let x = 0; x < GRID_CELL_COUNT.x; x++) {
+    for (let y = 0; y < GRID_CELL_COUNT.y; y++) {
       let east = 0;
       let west = 0;
       let north = 0;
@@ -15,8 +15,8 @@ export function calculateViewDistance(grid: Grid, print: boolean = false): numbe
       if (cellValue === 0) continue;
 
       for (let z = 1; z <= cellValue; z++) {
-        for (let _x = x + 1; _x < GRID_WIDTH; _x++) {
-          if (_x === GRID_WIDTH - 1) {
+        for (let _x = x + 1; _x < GRID_CELL_COUNT.x; _x++) {
+          if (_x === GRID_CELL_COUNT.x - 1) {
             east = MAX;
             break;
           }
@@ -31,8 +31,8 @@ export function calculateViewDistance(grid: Grid, print: boolean = false): numbe
           if (grid.getCellValue(_x, y) >= z) break;
           west++;
         }
-        for (let _y = y + 1; _y < GRID_DEPTH; _y++) {
-          if (_y === GRID_DEPTH - 1) {
+        for (let _y = y + 1; _y < GRID_CELL_COUNT.y; _y++) {
+          if (_y === GRID_CELL_COUNT.y - 1) {
             north = MAX;
             break;
           }
