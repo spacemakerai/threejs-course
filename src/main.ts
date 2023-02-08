@@ -399,7 +399,10 @@ scene.add(constraintMesh);
 // scene.add(fox.scene);
 
 document.getElementById("search")?.addEventListener("click", () => {
-  const sa = simulatedAnnealing(new Grid(), 50_000, 10);
+  const fullGrid = new Grid();
+  fullGrid.full();
+  const emptyGrid = new Grid();
+  const sa = simulatedAnnealing(fullGrid, 50_000, 10);
   function simulate() {
     const candidate = sa.next();
     gridMesh.update(candidate.value);
