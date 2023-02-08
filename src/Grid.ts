@@ -1,5 +1,7 @@
 import { GRID_CELL_COUNT } from "./constants";
 
+/** The size of the grid is defined in the file "constants.ts" */
+
 export default class Grid {
   array: number[][] = [];
 

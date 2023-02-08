@@ -208,7 +208,8 @@ controls.update();
 /**
  * For our buildings, we will use a simple 2d grid, with the cell value representing the number of floors.
  *
- * The size of the grid is defined in the file "constants.ts"
+ * This is our domain model, a pure Javascript/Typescript object which does not have anything with Three.js to do.
+ * Separating our domain model and the visual rendering is important when the application grow.
  *
  * Task:
  * - Create a grid using our provided Grid class
@@ -221,8 +222,16 @@ const grid = new Grid();
 grid.setCellValue(5, 5, 5);
 
 /**
- * Create the mesh and add it to the scene
+ * Now it would be nice to draw the buildings in the Scene.
+ *
+ * We have created a class which takes in a grid and will create boxes for representing the buildings. However, the
+ * implementation is not complete.
+ *
+ * Task:
+ * - Uncomment the two lines below
+ * - Go into the GroupOfBoxes class and complete the implementation of the method "addBoxAtGridIndex"
  */
+
 const gridMesh = new GroupOfBoxes(grid);
 scene.add(gridMesh);
 
