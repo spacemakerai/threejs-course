@@ -304,13 +304,13 @@ scene.add(gridMesh);
 canvas.addEventListener("mouseup", onmouseup);
 
 function onmouseup(event: MouseEvent) {
-  const positionInCanvas = findPositionInCanvas(event, canvas);
-
   // We check if the mouse moved between the mousedown and mouse up events.
   // We don't want to add apartments if the user only wanted to move the camera
-  // if (movedWhileClicking(mouseDownPosition, normalizedCoordinates)) {
-  //   return;
-  // }
+  if (movedWhileClicking(mouseDownPositionInCanvas, new Vector2(event.offsetX, event.offsetY))) {
+    return;
+  }
+
+  const positionInCanvas = findPositionInCanvas(event, canvas);
 
   const raycaster = new Raycaster();
   raycaster.setFromCamera(positionInCanvas, camera);
@@ -369,11 +369,12 @@ function worldCoordinatesToGridIndex(screenCoordinates: Vector3) {
 
 let mouseDownPositionInCanvas: Vector2;
 canvas.addEventListener("mousedown", (event: MouseEvent) => {
-  mouseDownPositionInCanvas = findPositionInCanvas(event, canvas);
+  mouseDownPositionInCanvas = new Vector2(event.offsetX, event.offsetY);
 });
 
 function movedWhileClicking(down: Vector2, up: Vector2): boolean {
-  return Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2) > 4;
+  const dist = Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2);
+  return dist > 4;
 }
 
 /**
