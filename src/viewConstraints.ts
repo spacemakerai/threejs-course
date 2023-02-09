@@ -22,7 +22,7 @@ export function exportToImage(canvas: HTMLCanvasElement, grid: Grid): void {
     row.forEach((floors, y) => {
       if (floors > 0) {
         const _x = x * CELL_SIZE.x * widthRatio;
-        const _y = (GRID_CELL_COUNT.y - y) * CELL_SIZE.y * heightRatio;
+        const _y = (GRID_CELL_COUNT.y - y - 1) * CELL_SIZE.y * heightRatio;
         context.fillStyle = `hsl(${(floors / GRID_CELL_COUNT.z) * 360}, 100%, 50%)`;
         context.fillRect(_x, _y, CELL_SIZE.x * widthRatio, CELL_SIZE.y * heightRatio);
         context.strokeRect(_x, _y, CELL_SIZE.x * widthRatio, CELL_SIZE.y * heightRatio);

@@ -209,8 +209,10 @@ scene.add(ambientLight);
  *
  */
 
+const texture = new THREE.TextureLoader().load("public/constraints.png");
+
 const groundGeometry = new PlaneGeometry(GRID_SIZE.x, GRID_SIZE.y);
-const groundMaterial = new MeshLambertMaterial({ color: 0xaaaaaa });
+const groundMaterial = new MeshLambertMaterial({ color: 0xaaaaaa, map: texture });
 const groundMesh = new Mesh(groundGeometry, groundMaterial);
 scene.add(groundMesh);
 
@@ -391,8 +393,8 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
  *
  * */
 
-const constraintMesh = new ConstraintMesh(constraintGrid);
-scene.add(constraintMesh);
+// const constraintMesh = new ConstraintMesh(constraintGrid);
+// scene.add(constraintMesh);
 
 // const loader = new GLTFLoader();
 // const fox = await loader.loadAsync("Fox.glb");
