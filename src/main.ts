@@ -317,7 +317,8 @@ const sensibleCameraPosition = new Vector3(GRID_CENTER.x, GRID_CENTER.y - 70, 80
  * - Create a grid using our provided Grid class and assign it to a variable `grid`
  * - Use the functions Grid.setCellValue() and Grid.getCellValue() in it to set the number of floors for a position
  *   of your choice.
- * - Check that it worked by console.log()ing the result.
+ * - Check that it worked by console.log()ing the result (console.log prints things to the browser's console. Google
+ * "how to open console in my browser" to figure out how! :)
  */
 
 //const grid = ...
