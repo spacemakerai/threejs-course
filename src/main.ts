@@ -26,11 +26,6 @@ import { listenForButtonClicks } from "./eventListeners";
 import { viewConstraints } from "./viewConstraints";
 import { constraintGrid } from "./constraint";
 
-const fov = 75;
-const aspectRatio = window.innerWidth / window.innerHeight;
-const frustumNearPlane = 0.1;
-const frustumFarPlane = 1000;
-
 const cameraUpAxis = new Vector3(0, 0, 1);
 const cameraInitialPosition = new Vector3(-5, -5, 1);
 const cameraPointToLookAt = new Vector3(0, 0, 0);
@@ -44,12 +39,12 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
 /**
  * ====== TASK 1 ======
  *
- * Scenes allow you to set up what and where is to be rendered by three.js. This is where you place objects, lights and cameras.
+ * The Scene contain all object you want to be rendered. This is where you place objects, lights and cameras.
  * Let's set up one up!
  *
  * Task:
  * - Create a new scene and assign it to a variable
- * - Create a new PerspectiveCamera and assign it to a variable
+ * - Create a new PerspectiveCamera and assign it to a variable,
  * - Uncomment the lines where we initialize the camera to a position and an angle
  *
  * Hints:
@@ -61,6 +56,12 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * https://threejs.org/docs/?q=perspec#api/en/cameras/PerspectiveCamera
  *
  * */
+
+// Use these values when creating the camera
+const fov = 75;
+const aspectRatio = window.innerWidth / window.innerHeight;
+const frustumNearPlane = 0.1;
+const frustumFarPlane = 1000;
 
 //Your code here
 //const scene = ...
