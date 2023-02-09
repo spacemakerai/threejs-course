@@ -18,7 +18,7 @@ import {
 } from "three";
 import Grid from "./Grid";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
+import GroupOfBoxes from "./GridMesh/GroupOfBoxes-lf";
 import { CELL_SIZE, GRID_CENTER, GRID_SIZE } from "./constants";
 import { viewScores } from "./viewScores";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -61,20 +61,16 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * https://threejs.org/docs/?q=perspec#api/en/cameras/PerspectiveCamera
  *
  * */
+const scene = new Scene();
+const camera = new PerspectiveCamera(fov, aspectRatio, frustumNearPlane, frustumFarPlane);
 
-//Your code here
-//const scene = ...
-//const camera = ...
-
-//camera.up = cameraUpAxis;
-//camera.position.copy(cameraInitialPosition);
-//camera.lookAt(cameraPointToLookAt);
+camera.up = cameraUpAxis;
+camera.position.copy(cameraInitialPosition);
+camera.lookAt(cameraPointToLookAt);
 
 /**
  * ====== TASK 2 ======
  * The WebGLRenderer is responsible for drawing the scene on the canvas, viewed from the cameras position
- *
- * Docs: https://threejs.org/docs/?q=web#api/en/renderers/WebGLRenderer
  *
  * Task:
  * - Initialize the WebGLRenderer with the canvas
@@ -82,7 +78,8 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-//Your code here
+const renderer = new WebGLRenderer({ canvas, antialias: true });
+renderer.render(scene, camera);
 
 /**
  * ====== TASK 3 ======
@@ -97,7 +94,11 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * - Make sure to call the render() method on the renderer again to tell three.js to render what we have given it
  * */
 
-//Your code here
+const geometry = new BoxGeometry(1, 1, 1);
+const material = new MeshLambertMaterial({ color: 0x00ff00 });
+const cube = new Mesh(geometry, material);
+scene.add(cube);
+renderer.render(scene, camera);
 
 /**
  * ====== TASK 4 ======
@@ -111,14 +112,14 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-//Your code here
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.render(scene, camera);
 
 /**
  * You can also set the background color to something less depressing using render.setClearColor
- * What about a nice "SkyBlue"?
  * */
 
-//Your code here
+renderer.setClearColor("SkyBlue", 1);
 
 /**
  * ====== TASK 5 ======
@@ -137,7 +138,7 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * */
 
 function animate() {
-  //Your code here
+  renderer.render(scene, camera); // Remove
   requestAnimationFrame(animate);
 }
 animate();
@@ -153,23 +154,18 @@ animate();
  *
  * Task:
  * - Create new OrbitControls and assign it to a variable `controls` so we can reference it later.
- *   Pass it the canvas we defined above as the domElement.
- *
- * Docs: https://threejs.org/docs/?q=orbit#examples/en/controls/OrbitControls
  * */
 
-//Your code here
+const controls = new OrbitControls(camera, renderer.domElement);
 
 /**
  * ====== TASK 7 ======
  * The cube is very green! Why don't we make it look slightly less jarring?
  * Task:
- * - Mutate the `color` property on the material to "white".
- *
- * Docs: https://threejs.org/docs/index.html?q=meshb#api/en/materials/MeshBasicMaterial.color
+ * - Mutate the `color` property on the material to white.
  * */
 
-//Your code here
+material.color.set(0xffffff);
 
 /**
  * ====== TASK 8 ======
@@ -185,14 +181,12 @@ animate();
  *
  * We suggest using an intensity of 0.7
  * Tip: If you want to view where the light is placed, you can add a new DirectionalLightHelper to the scene!
- *
- * Docs:
- * https://threejs.org/docs/index.html?q=meshb#api/en/materials/MeshBasicMaterial
- * https://threejs.org/docs/index.html#api/en/materials/MeshLambertMaterial
- * https://threejs.org/docs/index.html?q=direct#api/en/lights/DirectionalLight
  */
 
-//Your code here
+const directionalLight = new DirectionalLight(0xffffff, 0.9);
+directionalLight.position.set(-100, -20, 60);
+scene.add(directionalLight);
+scene.add(new DirectionalLightHelper(directionalLight));
 
 /**
  * ====== TASK 9 ======
@@ -205,10 +199,10 @@ animate();
  *
  * We suggest using an intensity of 0.4
  *
- * Docs: https://threejs.org/docs/index.html#api/en/lights/AmbientLight
  * */
 
-//Your code here
+const ambientLight = new AmbientLight(0xffffff, 0.4);
+scene.add(ambientLight);
 
 /**
  * ====== TASK 10 ======
@@ -237,15 +231,15 @@ animate();
  * - Create a MeshLambertMaterial to make it react to lighting (give it a color if you'd like!)
  * - Create a mesh from the geometry and the material
  *
- * Docs:
- * https://threejs.org/docs/index.html?q=Plane#api/en/geometries/PlaneGeometry
- * https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh
  */
 
-//Your code here
+const groundGeometry = new PlaneGeometry(GRID_SIZE.x, GRID_SIZE.y);
+const groundMaterial = new MeshLambertMaterial({ color: 0xaaaaaa });
+const groundMesh = new Mesh(groundGeometry, groundMaterial);
+scene.add(groundMesh);
 
 //TODO: Separate task to set position to make positioning clearer and more understandable?
-//groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
+groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
 
 /**
  * ====== TASK 11 ======
@@ -256,15 +250,11 @@ animate();
  * - Make the camera look at the center of the site
  *
  * Tip: The center of the grid is defined in the GRID_CENTER constant
- *
- * Docs:
- * https://threejs.org/docs/index.html?q=orbitc#examples/en/controls/OrbitControls.target
- * https://threejs.org/docs/index.html?q=orbitc#examples/en/controls/OrbitControls.update
- * https://threejs.org/docs/index.html?q=object#api/en/core/Object3D.position
- *
  */
 
-//Your code here
+camera.position.set(GRID_CENTER.x, GRID_CENTER.y - 70, 80);
+controls.target.set(GRID_CENTER.x, GRID_CENTER.y, 0);
+controls.update();
 
 /**
  * ====== TASK 12 ======
@@ -282,7 +272,9 @@ animate();
  * - Check that it worked by console.log()ing the result.
  */
 
-//Your code here
+const grid = new Grid();
+grid.setCellValue(5, 5, 5);
+grid.setCellValue(5, 7, 4);
 
 /**
  * ====== TASK 13 ======
@@ -298,8 +290,8 @@ animate();
  *   after you edit the grid
  */
 
-// const gridMesh = new GroupOfBoxes(grid);
-// scene.add(gridMesh);
+const gridMesh = new GroupOfBoxes(grid);
+scene.add(gridMesh);
 
 /**
  * ====== TASK 14 ======
@@ -337,7 +329,36 @@ animate();
  *
  * */
 
-//Your code here
+canvas.addEventListener("mouseup", onmouseup);
+
+function onmouseup(event: MouseEvent) {
+  const positionInCanvas = findPositionInCanvas(event, canvas);
+
+  // We check if the mouse moved between the mousedown and mouse up events.
+  // We don't want to add apartments if the user only wanted to move the camera
+  // if (movedWhileClicking(mouseDownPosition, normalizedCoordinates)) {
+  //   return;
+  // }
+
+  const raycaster = new Raycaster();
+  raycaster.setFromCamera(positionInCanvas, camera);
+
+  const intersections = raycaster.intersectObjects([groundMesh, gridMesh]);
+  if (intersections.length === 0) {
+    // We didn't hit anything in the scene
+    return;
+  }
+
+  const closest = intersections[0];
+
+  const { x, y } = worldCoordinatesToGridIndex(closest.point);
+
+  const currentValue = grid.getCellValue(x, y);
+  grid.setCellValue(x, y, Math.max(currentValue + (event.shiftKey ? -1 : 1), 0));
+  gridMesh.update(grid);
+
+  viewScores(grid);
+}
 
 /**
  * Normalized device coordinate or NDC space is a screen independent display coordinate system;
@@ -376,12 +397,11 @@ function worldCoordinatesToGridIndex(screenCoordinates: Vector3) {
 
 let mouseDownPositionInCanvas: Vector2;
 canvas.addEventListener("mousedown", (event: MouseEvent) => {
-  mouseDownPositionInCanvas = new Vector2(event.offsetX, event.offsetY);
+  mouseDownPositionInCanvas = findPositionInCanvas(event, canvas);
 });
 
 function movedWhileClicking(down: Vector2, up: Vector2): boolean {
-  const dist = Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2);
-  return dist > 4;
+  return Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2) > 4;
 }
 
 /**
@@ -397,15 +417,13 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
  *
  * */
 
-// const constraintMesh = new ConstraintMesh(constraintGrid);
-// scene.add(constraintMesh);
-
 // const loader = new GLTFLoader();
 // const fox = await loader.loadAsync("Fox.glb");
 //
 // scene.add(fox.scene);
+
+listenForButtonClicks(gridMesh, renderer, scene, camera, grid);
+
 document.getElementById("viewConstraints")?.addEventListener("click", () => {
   viewConstraints(constraintGrid);
 });
-
-listenForButtonClicks(gridMesh, renderer, scene, camera, grid);

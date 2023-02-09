@@ -41,3 +41,7 @@ canvas {
 #analysisScores {
   color: black;
 }
+
+button {
+  margin-bottom: 5px;
+}
