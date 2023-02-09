@@ -276,6 +276,10 @@ animate();
  *
  * */
 
+// Code goes here
+
+// scene.add(new AxesHelper(10));
+
 /**
  * ====== TASK 11 ======
  * It would be nice to have the camera looking towards the middle of our site from the get-go.
