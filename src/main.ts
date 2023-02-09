@@ -129,6 +129,7 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  * Task:
  * - Add the renderer.render function call into the animate function.
  * - Remove the manual renderer.render function calls you have already written, and see that this works
+ * - Play around with setting the position of the cube and see how it automatically updates
  *
  * Note:
  * This will draw the scene all the time. In production environments you most likely want to be smart about
@@ -384,7 +385,7 @@ canvas.addEventListener("mousedown", (event: MouseEvent) => {
 
 function movedWhileClicking(down: Vector2, up: Vector2): boolean {
   const dist = Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2);
-  return dist > 4;
+  return dist > 0.01;
 }
 
 /**

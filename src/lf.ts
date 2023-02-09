@@ -131,6 +131,7 @@ renderer.setClearColor("SkyBlue", 1);
  * Task:
  * - Add the renderer.render function call into the animate function.
  * - Remove the manual renderer.render function calls you have already written, and see that this works
+ * - Play around with setting the position of the cube and see how it automatically updates
  *
  * Note:
  * This will draw the scene all the time. In production environments you most likely want to be smart about
@@ -337,9 +338,9 @@ function onmouseup(event: MouseEvent) {
 
   // We check if the mouse moved between the mousedown and mouse up events.
   // We don't want to add apartments if the user only wanted to move the camera
-  // if (movedWhileClicking(mouseDownPosition, normalizedCoordinates)) {
-  //   return;
-  // }
+  if (movedWhileClicking(mouseDownPositionInCanvas, positionInCanvas)) {
+    return;
+  }
 
   const raycaster = new Raycaster();
   raycaster.setFromCamera(positionInCanvas, camera);
@@ -402,7 +403,7 @@ canvas.addEventListener("mousedown", (event: MouseEvent) => {
 });
 
 function movedWhileClicking(down: Vector2, up: Vector2): boolean {
-  return Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2) > 4;
+  return Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2) > 0.01;
 }
 
 /**
