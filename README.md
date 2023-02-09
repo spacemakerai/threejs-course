@@ -42,7 +42,18 @@ Visual Studio Code includes TypeScript language support out-of-the-box, so no ex
 Some useful hotkeys:
 | Hotkey  | Windows/Linux  | Mac
 |---|---|---|
-| See which parameters a class or a function takes in  | Ctrl + Shift + Space  | Shift ⇧ + Cmd ⌘ + Space  | 
+| See which parameters a class or a function takes in  | Ctrl + Shift + Space  | Shift ⇧ + Cmd ⌘ + Space  |
 | Go to definition  | F12 / Ctrl + Click  | F12 / Cmd ⌘ + Click |
 | See usages  | F12 / Ctrl + Click  | F12 / Cmd ⌘ + Click |
 
+### IntelliJ / WebStorm
+
+IntelliJ and Webstorm needs the Typescript plugin installed, but by default it comes bundled, so this should work
+out of the box.
+
+Some useful hotkeys:
+| Hotkey  | Windows/Linux  | Mac
+|---|---|---|
+| See which parameters a class or a function takes in  | Ctrl + P  | Cmd ⌘ + P  |
+| Go to definition  | Ctrl + B / Ctrl + Click  | Cmd + B / Cmd ⌘ + Click |
+| See usages  | Ctrl + B / Ctrl + Click  | Cmd + B / Cmd ⌘ + Click |
