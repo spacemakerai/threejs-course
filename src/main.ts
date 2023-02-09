@@ -407,6 +407,7 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
 // const fox = await loader.loadAsync("Fox.glb");
 //
 // scene.add(fox.scene);
+
 document.getElementById("viewConstraints")?.addEventListener("click", () => {
   viewConstraints(constraintGrid);
 });

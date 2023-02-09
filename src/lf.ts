@@ -12,6 +12,7 @@ import {
   PlaneGeometry,
   Raycaster,
   Scene,
+  TextureLoader,
   Vector2,
   Vector3,
   WebGLRenderer,
@@ -403,6 +404,28 @@ canvas.addEventListener("mousedown", (event: MouseEvent) => {
 function movedWhileClicking(down: Vector2, up: Vector2): boolean {
   return Math.sqrt((down.x - up.x) ** 2 + (down.y - up.y) ** 2) > 4;
 }
+
+/**
+ * ====== TASK 16 ======
+ *
+ * It would be nice to see where we are allowed to draw on the canvas.
+ *
+ * The public folder contains a file called "constraints.png"
+ *
+ * Task:
+ * - Use a TextureLoader to load the constraints.png image
+ * - Add the texture to the material of the ground mesh.
+ *
+ * Hint:
+ * - You can assign the texture to the Material.map property
+ *
+ * Docs:
+ * - https://threejs.org/docs/#api/en/loaders/TextureLoader
+ * - https://threejs.org/docs/?q=material#api/en/materials/MeshLambertMaterial.map
+ *
+ * */
+const texture = new TextureLoader().load("constraints.png");
+groundMesh.material.map = texture;
 
 /**
  * Extra tasks for the fast ones!
