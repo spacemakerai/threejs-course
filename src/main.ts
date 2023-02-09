@@ -61,15 +61,13 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-// Use these values when creating the camera
+// Use these values when creating the camera, pass them in as parameters when you do new PerspectiveCamera()
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
 const frustumNearPlane = 0.1;
 const frustumFarPlane = 1000;
 
 //Your code here
-//const scene = ...
-//const camera = ...
 const scene = new Scene()
 const camera = new PerspectiveCamera()
 
