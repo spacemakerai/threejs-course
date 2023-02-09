@@ -91,9 +91,9 @@ const camera = new PerspectiveCamera()
  * HINT: The WebGLRenderer expects its parameters inside a javascript object. An example of a js object is this:
  *
  * const myObject = {
- *   someKey: 1,
- *   anotherKey: 2,
- *   thisIsAThirdKey: 3
+ *   someKey: 1337,
+ *   anotherKey: 42,
+ *   thisIsAThirdKey: 9001
  * }
  *
  * Try to put the canvas inside an object where the key is canvas and the value is the canvas!
