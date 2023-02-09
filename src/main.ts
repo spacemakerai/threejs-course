@@ -205,7 +205,7 @@ animate();
  *
  *
  * Task:
- * - Change the material of the cube from MeshBasicMaterial to MeshLambertMaterial
+ * - Scroll up and change where you created the material of the cube from MeshBasicMaterial to MeshLambertMaterial
  * - Create a DirectionalLight https://threejs.org/docs/index.html?q=direct#api/en/lights/DirectionalLight
  * - Add the light to the scene
  * - Position the light at position (-2, -5, 10)
