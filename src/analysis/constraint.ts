@@ -2,7 +2,7 @@ import Grid from "../Grid";
 import { constraintGrid } from "../constraint";
 import { GRID_CELL_COUNT } from "../constants";
 
-// Color all blocks according to legality
+// Count all blocks according to legality
 export function constraintAnalysis(grid: Grid): number {
   let count = 0;
 

@@ -388,6 +388,26 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
 }
 
 /**
+ * ====== TASK 16 ======
+ *
+ * It would be nice to see where we are allowed to draw on the canvas.
+ *
+ * The public folder contains a file called "constraints.png"
+ *
+ * Task:
+ * - Use a TextureLoader to load the constraints.png image
+ * - Add the texture to the material of the ground mesh.
+ *
+ * Hint:
+ * - You can assign the texture to the Material.map property
+ *
+ * Docs:
+ * - https://threejs.org/docs/#api/en/loaders/TextureLoader
+ * - https://threejs.org/docs/?q=material#api/en/materials/MeshLambertMaterial.map
+ *
+ * */
+
+/**
  * Extra tasks for the fast ones!
  *
  * 1. Drawing many meshes is not good for performance! Our class GroupOfBoxes have one mesh per cell in the grid.

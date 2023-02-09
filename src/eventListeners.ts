@@ -12,7 +12,7 @@ export function listenForButtonClicks(gridMesh: IGridMesh, renderer: Renderer, s
     /*const fullGrid = new Grid();
     fullGrid.full();*/
     const emptyGrid = new Grid();
-    const sa = simulatedAnnealing(emptyGrid, 50_000, 10);
+    const sa = simulatedAnnealing(emptyGrid, 100_000, 10);
     function simulate() {
       const candidate = sa.next();
       gridMesh.update(candidate.value);

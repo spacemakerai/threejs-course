@@ -3,7 +3,7 @@ import { GRID_CELL_COUNT } from "../constants";
 
 const MAX = 8;
 
-export function generateViewScoresPerApartment(grid: Grid, print: boolean) {
+export function generateViewScoresPerApartment(grid: Grid) {
   const scores: number[][][] = grid.array.map((row) => row.map((column) => [...Array(column)]));
   for (let x = 0; x < GRID_CELL_COUNT.x; x++) {
     for (let y = 0; y < GRID_CELL_COUNT.y; y++) {
@@ -50,34 +50,20 @@ export function generateViewScoresPerApartment(grid: Grid, print: boolean) {
         }
         const maxDistance = Math.max(east, west, north, south);
 
-        if (print) {
-          console.log(maxDistance);
-        }
         if (maxDistance === 0) {
           scores[x][y][z - 1] = -10;
-          //scores.push(-10);
         } else {
           scores[x][y][z - 1] = Math.min(1 - (MAX - maxDistance) / MAX, 1);
-          //scores.push(Math.min(1 - (MAX - maxDistance) / MAX, 1));
         }
       }
-
-      // if (maxDistance === 0) {
-      //   scores.push(-10);
-      // } else {
-      //   scores.push(maxDistance);
-      // }
     }
   }
 
-  if (print) {
-    console.log(scores);
-  }
   return scores;
 }
 
-export function calculateViewDistance(grid: Grid, print: boolean = false): number {
-  const scores = generateViewScoresPerApartment(grid, print);
+export function calculateViewDistance(grid: Grid): number {
+  const scores = generateViewScoresPerApartment(grid);
 
   if (scores.length === 0) return 0;
 

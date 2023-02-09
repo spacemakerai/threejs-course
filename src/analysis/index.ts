@@ -17,12 +17,12 @@ export function getAnalysisScore(grid: Grid) {
 }
 
 export function evaluate(result: AnalysisResult) {
-  return (result.view + result.sellableApartments + result.outdoor + result.constraint) / 4;
+  return (result.view + result.sellableApartments + result.outdoor) / 3 + result.constraint;
 }
 
 export function runAnalysis(grid: Grid): AnalysisResult {
   return {
-    outdoor: getOutdoorAreaSimple(grid), // getOutdoorAreaScore(grid),
+    outdoor: getOutdoorAreaSimple(grid),
     view: calculateViewDistance(grid),
     sellableApartments: calculateApartmentCount(grid),
     constraint: constraintAnalysis(grid),
