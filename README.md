@@ -26,5 +26,23 @@ Navigate to `src/main.ts` and scroll down to "TASK 1" and follow the instruction
 
 Good luck!
 
-## Code editor tips
+ ## Code editor tips
+
+Different editors have different out-of-the-box support for the libraries we're using in this repository – see different
+popular alternatives below.
+
+In general, most editors will help you with auto-completing which parameters you need to pass in to a function – at
+least after necessary dependencies [have been installed](#running-the-code). This will be very useful throughout this
+course. See the different editor sections for how to see this.
+
+### Visual Studio Code
+
+Visual Studio Code includes TypeScript language support out-of-the-box, so no extensions are needed.
+
+Some useful hotkeys:
+| Hotkey  | Windows/Linux  | Mac
+|---|---|---|
+| See which parameters a class or a function takes in  | Ctrl + Shift + Space  | Shift ⇧ + Cmd ⌘ + Space  | 
+| Go to definition  | F12 / Ctrl + Click  | F12 / Cmd ⌘ + Click |
+| See usages  | F12 / Ctrl + Click  | F12 / Cmd ⌘ + Click |
 
