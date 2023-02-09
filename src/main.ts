@@ -337,7 +337,10 @@ animate();
  *
  * */
 
-//Your code here
+canvas.addEventListener("mouseup", onmouseup);
+function onmouseup(event: MouseEvent) {
+  //Your code here
+}
 
 /**
  * Normalized device coordinate or NDC space is a screen independent display coordinate system;
