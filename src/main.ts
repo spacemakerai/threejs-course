@@ -88,6 +88,16 @@ const camera = new PerspectiveCamera()
  * - Initialize the WebGLRenderer with the canvas as a parameter
  * - Call the render() function on the renderer with the required parameters
  *
+ * HINT: The WebGLRenderer expects its parameters inside a javascript object. An example of a js object is this:
+ *
+ * const myObject = {
+ *   someKey: 1,
+ *   anotherKey: 2,
+ *   thisIsAThirdKey: 3
+ * }
+ *
+ * Try to put the canvas inside an object where the key is canvas and the value is the canvas!
+ *
  * */
 
 //Your code here
