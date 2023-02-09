@@ -2,6 +2,7 @@ import { BoxGeometry, FrontSide, Group, LineBasicMaterial, LineSegments, Mesh, M
 import Grid from "../Grid";
 import { IGridMesh } from "./GridMesh";
 import { CELL_SIZE, GRID_CELL_COUNT } from "../constants";
+import * as THREE from "three";
 
 export const BOX_MATERIAL = new MeshLambertMaterial({
   side: FrontSide,
@@ -31,24 +32,33 @@ export default class GroupOfBoxes extends Group implements IGridMesh {
     }
   }
 
-  addBoxAtGridIndex(x: number, y: number, floors: number) {
+  addBoxAtGridIndex(gridIndexX: number, gridIndexY: number, floors: number) {
     /**
-     * Use your knowledge about how to create a box and add that box to this group with "this.add(boxMesh)"
+     * Use your knowledge about how to create a box to draw all the buildings.
      *
-     * Hints:
-     * - The size of the box is defined by the constant CELL_SIZE
-     * - The box is centered in the middle. You need to add an offset to the position of the box to compensate for this.
+     * Tasks:
+     * - Create a box like we did earlier, and add it with "this.add(boxMesh)"
+     * - Set the size of the box. This is defined by the constant CELL_SIZE. Hint: The height is #floors * CELL_SIZE.z
+     * - Like with the plane, the box has origo in the middle of the box. You need to add an offset to the position of
+     *   the box to compensate for this.
+     * - Position the box according to where in the grid it should be. Use the "gridIndexX", "gridIndexY" and the
+     *   CELL_SIZE to calculate this position
+     *
+     * Hint:
+     * - It is easier to visualize if you have it correct if you add multiple buildings to the Grid class in the previous task
+     *
+     * When done, go back to main.ts and continue on the tasks there
      * */
 
-    const size = new Vector3(CELL_SIZE.x, CELL_SIZE.y, floors * CELL_SIZE.z);
+    const height = floors * CELL_SIZE.z;
 
-    const box = new Mesh(new BoxGeometry(size.x, size.y, size.z), BOX_MATERIAL);
+    const geometry = new THREE.BoxGeometry(CELL_SIZE.x, CELL_SIZE.y, height);
+    const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.set(gridIndexX * CELL_SIZE.x + CELL_SIZE.x / 2, gridIndexY * CELL_SIZE.y + CELL_SIZE.y / 2, height / 2);
 
-    const gridPosition = new Vector3(CELL_SIZE.x * x, CELL_SIZE.y * y, 0);
-    const centerOffset = new Vector3().copy(size).divideScalar(2);
-    box.position.copy(gridPosition.add(centerOffset));
-
-    this.add(box);
+    this.add(cube);
+    //Your code here
   }
 
   cleanup() {

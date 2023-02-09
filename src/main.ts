@@ -2,6 +2,7 @@ import "./style.css";
 import "./featureFlag";
 import {
   AmbientLight,
+  AxesHelper,
   BoxGeometry,
   DirectionalLight,
   DirectionalLightHelper,
@@ -16,6 +17,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three";
+import * as THREE from "three";
 import Grid from "./Grid";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import GroupOfBoxes from "./GridMesh/GroupOfBoxes";
@@ -25,6 +27,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { listenForButtonClicks } from "./eventListeners";
 import { viewConstraints } from "./viewConstraints";
 import { constraintGrid } from "./constraint";
+import GridMesh from "./GridMesh/GridMesh";
 
 const cameraUpAxis = new Vector3(0, 0, 1);
 const cameraInitialPosition = new Vector3(-5, -5, 1);
@@ -67,19 +70,22 @@ const frustumFarPlane = 1000;
 //const scene = ...
 //const camera = ...
 
-//camera.up = cameraUpAxis;
-//camera.position.copy(cameraInitialPosition);
-//camera.lookAt(cameraPointToLookAt);
+// camera.up = cameraUpAxis;
+// camera.position.copy(cameraInitialPosition);
+// camera.lookAt(cameraPointToLookAt);
 
 /**
  * ====== TASK 2 ======
+ * Your still seeing a red canvas. That is because we have not told Three.js to draw anything to the screen yet. Lets
+ * fix that!
+ *
  * The WebGLRenderer is responsible for drawing the scene on the canvas, viewed from the cameras position
  *
  * Docs: https://threejs.org/docs/?q=web#api/en/renderers/WebGLRenderer
  *
  * Task:
- * - Initialize the WebGLRenderer with the canvas
- * - Call the render() function on the renderer!
+ * - Initialize the WebGLRenderer with the canvas as a parameter
+ * - Call the render() function on the renderer with the required parameters
  *
  * */
 
@@ -87,7 +93,7 @@ const frustumFarPlane = 1000;
 
 /**
  * ====== TASK 3 ======
- * YAY! ThreeJs has taken over the drawing of the canvas – which you can see because the screen has turned black
+ * YAY! Three.js has taken over the drawing of the canvas – which you can see because the screen has turned black
  * instead of red.
  *
  * But a black screen isn't *that* much more interesting than a red one... Let's add something to look at!
@@ -115,6 +121,9 @@ const frustumFarPlane = 1000;
 //Your code here
 
 /**
+ * ====== TASK 4b ======
+ * Nice! Now we actually see that we have a cube
+ *
  * You can also set the background color to something less depressing using render.setClearColor
  * What about a nice "SkyBlue"?
  * */
@@ -139,10 +148,12 @@ const frustumFarPlane = 1000;
  * */
 
 function animate() {
-  //Your code here
+  // Your code here
   requestAnimationFrame(animate);
 }
 animate();
+
+// Play around with position here!
 
 /**
  * ====== TASK 6 ======
@@ -164,9 +175,12 @@ animate();
 
 /**
  * ====== TASK 7 ======
- * The cube is very green! Why don't we make it look slightly less jarring?
+ * Sweet, we can now move the camera around with the mouse!
+ *
+ * However, the cube is very green! Why don't we make it look slightly less jarring?
+ *
  * Task:
- * - Mutate the `color` property on the material to "white".
+ * - Set the `color` on the cubes material to "white".
  *
  * Docs: https://threejs.org/docs/index.html?q=meshb#api/en/materials/MeshBasicMaterial.color
  * */
@@ -216,8 +230,6 @@ animate();
  * ====== TASK 10 ======
  * Let's start building Spacemaker light version!
  *
- * Demo
- *
  * Imagine we have a grid that has n x m cells, where each cell represents a spot where a building can be placed:
  *
  * +---+---+---+---+
@@ -232,27 +244,42 @@ animate();
  *
  * This is our site!
  * Let's start by adding the ground on the site that the buildings can stand on top of.
- * It needs to be as large as the size of the grid. The size of the grid can be found in the GRID_SIZE variable!
+ * It needs to be as large as the size of the grid. The size of the grid can be found in the GRID_SIZE variable in
+ * the constants.ts file!
  *
  * Task:
  * - Create a PlaneGeometry equal to the size of the grid.
- * - Create a MeshLambertMaterial to make it react to lighting (give it a color if you'd like!)
- * - Create a mesh from the geometry and the material
+ * - Create a MeshLambertMaterial and give it a color if you'd like!
+ * - Create a Mesh from the geometry and the material
+ * - Add the Mesh to the Scene
  *
  * Docs:
  * https://threejs.org/docs/index.html?q=Plane#api/en/geometries/PlaneGeometry
  * https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh
  */
 
-//Your code here
-
-//TODO: Separate task to set position to make positioning clearer and more understandable?
-//groundMesh.position.set(GRID_CENTER.x, GRID_CENTER.y, 0);
+/**
+ * ====== TASK 10b ======
+ *
+ * For our Spacemaker light application, we want everything to be positioned in the positive quadrant of the coordinate
+ * system.
+ *
+ * The default position of the plane is in the center of the plane. We therefor need to translate the plane 50% of the
+ * plane size in the x and y direction.
+ *
+ * Task:
+ * - Set the position of the plane so it is in the positive quadrant of the grid
+ *
+ * Hint:
+ * - Uncomment the line with the AxisHelper to see where the origo of the Scene is
+ * - See the file "Plane center position.png" in the public folder to get a sense of what we should do here
+ *
+ * */
 
 /**
  * ====== TASK 11 ======
  * It would be nice to have the camera looking towards the middle of our site from the get-go.
- * To position the camera, you can use "camera.position.set()" and to make the camera angled towards something, you can
+ * To position the camera, you can use "camera.position.set()". To make the camera angled towards something, you can
  * use "controls.target.set()". Finally you must do a "controls.update()".
  * Task:
  * - Make the camera look at the center of the site
@@ -266,6 +293,8 @@ animate();
  *
  */
 
+const sensibleCameraPosition = new Vector3(GRID_CENTER.x, GRID_CENTER.y - 70, 80);
+
 //Your code here
 
 /**
@@ -275,7 +304,7 @@ animate();
  * floors for that cell.
  *
  * This is our domain model, a pure Javascript/Typescript object which does not have anything with Three.js to do.
- * Separating our domain model and the visual rendering is important when the application grow.
+ * Separating our domain model and the visual rendering is important when the application grows.
  *
  * Task:
  * - Create a grid using our provided Grid class and assign it to a variable `grid`
@@ -283,6 +312,8 @@ animate();
  *   of your choice.
  * - Check that it worked by console.log()ing the result.
  */
+
+//const grid = ...
 
 //Your code here
 
@@ -300,7 +331,7 @@ animate();
  *   after you edit the grid
  */
 
-// const gridMesh = new GroupOfBoxes(grid);
+// const gridMesh = new GridMesh(grid);
 // scene.add(gridMesh);
 
 /**
@@ -310,18 +341,17 @@ animate();
  * Until now, we have only programmatically added things to the scene. To make a real tool, we need to allow the user
  * to draw the buildings where they want.
  *
- * We want to capture add or remove a floor when the user clicks somewhere on the map.
+ * We want to add or remove a floor when the user clicks somewhere on the map.
  *
  * Docs: https://threejs.org/docs/#api/en/core/Raycaster
  *
  * Task:
- * - Use the function findPositionInCanvas to get the canvas x,y coordinates
  * - Create a Raycaster
  * - Set the Raycaster position using the Raycaster.setFromCamera() function
- * - Use the function Raycaster.intersectObjects() to intersect with the Ground and the GroupOfBoxes. This function
- *   returns a list of intersections, sorted from closest to the camera to furthest away from the camera
+ * - Use the function Raycaster.intersectObjects() to intersect with the PlaneMesh and the GroupOfBoxes. This function
+ *   returns a list of intersections (things ray hit), sorted from closest to the camera to furthest away from the camera
  * - Check if we got any intersections, if yes, get the first one
- * - Use the function worldCoordinatesToGridIndex(intersection.point) to map this coordinate to grid index
+ * - Use the function worldCoordinatesToGridIndex(intersection.point) to transform this coordinate to the grid index
  * - Get the current number of floors for the given grid cell
  * - Set the number of floors for the given cell to one more than before
  * - Update the GroupOfBoxes to see the result
@@ -341,7 +371,11 @@ animate();
 
 canvas.addEventListener("mouseup", onmouseup);
 function onmouseup(event: MouseEvent) {
+  const positionInCanvas = findPositionInCanvas(event, canvas); // Canvas coordinate between (0,0) and (1,1)
+
   //Your code here
+
+  //viewScores(grid);
 }
 
 /**
@@ -368,6 +402,17 @@ function worldCoordinatesToGridIndex(screenCoordinates: Vector3) {
 }
 
 /**
+ * ====== TASK 14b ======
+ *
+ * Now that we can draw buildings, it would be nice to save and load them as well.
+ *
+ * Task:
+ * - Uncomment the line below and make sure the parameter names match yours.
+ * */
+
+//listenForButtonClicks(gridMesh, renderer, scene, camera, grid);
+
+/**
  * ====== TASK 15 ======
  * It is a bit annoying that we add a box when we simply want to move the camera.
  *
@@ -376,7 +421,8 @@ function worldCoordinatesToGridIndex(screenCoordinates: Vector3) {
  *
  * Hint:
  * - We already record the canvas position in the variable "mouseDownPositionInCanvas" when mouse is clicked down
- * - The function "movedWhileClicking" can be used to check the distance the mouse has moved
+ * - The function "movedWhileClicking" can be used to check the distance the mouse has moved between the mouse down event
+ *   and the mouse up event
  * */
 
 let mouseDownPositionInCanvas: Vector2;
@@ -392,7 +438,7 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
 /**
  * ====== TASK 16 ======
  *
- * It would be nice to see where we are allowed to draw on the canvas.
+ * It would be nice to see where we are allowed to draw on the canvas, based on Oslo regulations
  *
  * The public folder contains a file called "constraints.png"
  *
@@ -420,6 +466,7 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
  *    Task: Switch out the usage of GroupOfBoxes with GridMesh. Their interface is identical. As you can see, we forgot
  *    to add the left face of the boxes. Fill in the missing code to draw the left face of the boxes
  *
+ * 2. Play around with the commented code below
  * */
 
 // const constraintMesh = new ConstraintMesh(constraintGrid);
@@ -433,5 +480,3 @@ function movedWhileClicking(down: Vector2, up: Vector2): boolean {
 document.getElementById("viewConstraints")?.addEventListener("click", () => {
   viewConstraints(constraintGrid);
 });
-
-listenForButtonClicks(gridMesh, renderer, scene, camera, grid);

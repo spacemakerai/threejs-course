@@ -103,16 +103,9 @@ export function getBoxGeometry(x0: number, y0: number, y1: number, x1: number, h
   );
 
   // Left face
-  // TODO: Fill in the left face
-  positions.push(
-    [x0, y1, 0],
-    [x0, y0, 0],
-    [x0, y1, height],
-
-    [x0, y0, 0],
-    [x0, y0, height],
-    [x0, y1, height]
-  );
+  /**
+   * Add your code here!
+   */
 
   // Right face
   positions.push(

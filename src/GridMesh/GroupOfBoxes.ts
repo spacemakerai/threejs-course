@@ -2,6 +2,8 @@ import { BoxGeometry, FrontSide, Group, LineBasicMaterial, LineSegments, Mesh, M
 import Grid from "../Grid";
 import { IGridMesh } from "./GridMesh";
 import { CELL_SIZE, GRID_CELL_COUNT } from "../constants";
+import * as THREE from "three";
+import { floor } from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 
 export const BOX_MATERIAL = new MeshLambertMaterial({
   side: FrontSide,
@@ -31,14 +33,26 @@ export default class GroupOfBoxes extends Group implements IGridMesh {
     }
   }
 
-  addBoxAtGridIndex(x: number, y: number, floors: number) {
+  addBoxAtGridIndex(gridIndexX: number, gridIndexY: number, floors: number) {
     /**
-     * Use your knowledge about how to create a box and add that box to this group with "this.add(boxMesh)"
+     * Use your knowledge about how to create a box to draw all the buildings.
      *
-     * Hints:
-     * - The size of the box is defined by the constant CELL_SIZE
-     * - The box is centered in the middle. You need to add an offset to the position of the box to compensate for this.
+     * Tasks:
+     * - Create a box like we did earlier, and add it with "this.add(boxMesh)"
+     * - Set the size of the box. This is defined by the constant CELL_SIZE. Hint: The height is #floors * CELL_SIZE.z
+     * - Like with the plane, the box has origo in the middle of the box. You need to add an offset to the position of
+     *   the box to compensate for this.
+     * - Position the box according to where in the grid it should be. Use the "gridIndexX", "gridIndexY" and the
+     *   CELL_SIZE to calculate this position
+     *
+     * Hint:
+     * - It is easier to visualize if you have it correct if you add multiple buildings to the Grid class in the previous task
+     *
+     *
+     * When done, go back to main.ts and continue on the tasks there
      * */
+    const height = floors * CELL_SIZE.z;
+
     //Your code here
   }
 
