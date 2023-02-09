@@ -4,6 +4,7 @@ import {
   AmbientLight,
   AxesHelper,
   BoxGeometry,
+  Camera,
   DirectionalLight,
   DirectionalLightHelper,
   Mesh,
@@ -69,6 +70,8 @@ const frustumFarPlane = 1000;
 //Your code here
 //const scene = ...
 //const camera = ...
+const scene = new Scene()
+const camera = new PerspectiveCamera()
 
 // camera.up = cameraUpAxis;
 // camera.position.copy(cameraInitialPosition);
