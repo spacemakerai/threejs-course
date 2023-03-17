@@ -269,6 +269,8 @@ animate();
  * https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh
  */
 
+//Your code here
+
 /**
  * ====== TASK 10b ======
  *
