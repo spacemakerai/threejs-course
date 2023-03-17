@@ -443,7 +443,7 @@ function worldCoordinatesToGridIndex(screenCoordinates: Vector3) {
 
 let mouseDownPositionInCanvas: Vector2;
 canvas.addEventListener("mousedown", (event: MouseEvent) => {
-  mouseDownPositionInCanvas = new Vector2(event.offsetX, event.offsetY);
+  mouseDownPositionInCanvas = findPositionInCanvas(event, canvas);
 });
 
 function movedWhileClicking(down: Vector2, up: Vector2): boolean {
