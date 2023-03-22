@@ -16,8 +16,8 @@ You will need the following installed:
 1. Install node (see above)
 2. Install yarn: `sudo npm install --global yarn`
 3. Download the repository, either by `git clone https://github.com/spacemakerai/threejs-course.git` or by downloading the ZIP.
-4. In a terminal, navigate to the downloaded folder and run `yarn install`
-5. To run the code and make it listen to changes, run `yarn dev`
+4. In a terminal, navigate to the downloaded folder and run `yarn install` or `npm install`
+5. To run the code and make it listen to changes, run `yarn dev` or `npm run dev`
 
 Open the URL that is printed to your terminal to open the webpage.
 If you're seeing a completely red canvas, you're set to begin!
