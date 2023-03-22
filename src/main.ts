@@ -48,7 +48,7 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * Task:
  * - Create a new scene and assign it to a variable
- * - Create a new PerspectiveCamera and assign it to a variable,
+ * - Create a new PerspectiveCamera and assign it to a variable
  * - Uncomment the lines where we initialize the camera to a position and an angle
  *
  * Hints:
@@ -61,19 +61,18 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-// Use these values when creating the camera, pass them in as parameters when you do new PerspectiveCamera()
+// Use these values when creating the camera
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
 const frustumNearPlane = 0.1;
 const frustumFarPlane = 1000;
 
-//Your code here
-const scene = new Scene()
-const camera = new PerspectiveCamera()
+const scene = new Scene();
+const camera = new PerspectiveCamera(fov, aspectRatio, frustumNearPlane, frustumFarPlane);
 
-// camera.up = cameraUpAxis;
-// camera.position.copy(cameraInitialPosition);
-// camera.lookAt(cameraPointToLookAt);
+camera.up = cameraUpAxis;
+camera.position.copy(cameraInitialPosition);
+camera.lookAt(cameraPointToLookAt);
 
 /**
  * ====== TASK 2 ======
@@ -88,19 +87,10 @@ const camera = new PerspectiveCamera()
  * - Initialize the WebGLRenderer with the canvas as a parameter
  * - Call the render() function on the renderer with the required parameters
  *
- * HINT: The WebGLRenderer expects its parameters inside a javascript object. An example of a js object is this:
- *
- * const myObject = {
- *   someKey: 1337,
- *   anotherKey: 42,
- *   thisIsAThirdKey: 9001
- * }
- *
- * Try to put the canvas inside an object where the key is canvas and the value is the canvas!
- *
  * */
 
-//Your code here
+const renderer = new WebGLRenderer({ canvas, antialias: true });
+renderer.render(scene, camera);
 
 /**
  * ====== TASK 3 ======
@@ -115,7 +105,11 @@ const camera = new PerspectiveCamera()
  * - Make sure to call the render() method on the renderer again to tell three.js to render what we have given it
  * */
 
-//Your code here
+const geometry = new BoxGeometry(1, 1, 1);
+const material = new MeshLambertMaterial({ color: 0x00ff00 });
+const cube = new Mesh(geometry, material);
+scene.add(cube);
+renderer.render(scene, camera);
 
 /**
  * ====== TASK 4 ======
@@ -129,7 +123,9 @@ const camera = new PerspectiveCamera()
  *
  * */
 
-//Your code here
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+console.log(canvas.clientWidth, canvas.clientHeight)
+renderer.render(scene, camera);
 
 /**
  * ====== TASK 4b ======
@@ -139,7 +135,8 @@ const camera = new PerspectiveCamera()
  * What about a nice "SkyBlue"?
  * */
 
-//Your code here
+renderer.setClearColor("SkyBlue");
+renderer.render(scene, camera)
 
 /**
  * ====== TASK 5 ======
@@ -349,8 +346,8 @@ const sensibleCameraPosition = new Vector3(GRID_CENTER.x, GRID_CENTER.y - 70, 80
  *   after you edit the grid
  */
 
-// const gridMesh = new GridMesh(grid);
-// scene.add(gridMesh);
+// const groupOfBoxes = new GroupOfBoxes(grid);
+// scene.add(groupOfBoxes);
 
 /**
  * ====== TASK 14 ======
