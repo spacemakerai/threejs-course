@@ -17,6 +17,7 @@ export default class GridMesh extends Group implements IGridMesh {
   constructor(grid: Grid) {
     super();
     this.mesh = new Mesh(new BufferGeometry(), BOX_MATERIAL);
+    this.mesh.frustumCulled = false
     this.lineSegments = new LineSegments(new BufferGeometry(), EDGES_MATERIAL);
     this.add(this.mesh, this.lineSegments);
 

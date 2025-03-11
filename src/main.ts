@@ -186,7 +186,7 @@ animate();
  * ====== TASK 7 ======
  * Sweet, we can now move the camera around with the mouse!
  *
- * However, the cube is very green! Why don't we make it look slightly less jarring?
+ * However, the cube (if you copied the code from the docs) is very green! Why don't we make it look slightly less jarring?
  *
  * Task:
  * - Set the `color` on the cubes material to "white".
