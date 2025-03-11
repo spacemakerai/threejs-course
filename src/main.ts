@@ -320,7 +320,7 @@ const sensibleCameraPosition = new Vector3(GRID_CENTER.x, GRID_CENTER.y - 70, 80
  * For our buildings, we will use the simple 2d grid described above, with the cell value representing the number of
  * floors for that cell.
  *
- * This is our domain model, a pure Javascript/Typescript object which does not have anything with Three.js to do.
+ * This is our domain model, a pure Javascript/Typescript object which does not have anything to do with Three.js.
  * Separating our domain model and the visual rendering is important when the application grows.
  *
  * Task:
