@@ -69,6 +69,10 @@ const frustumFarPlane = 1000;
 
 //Your code here
 
+// camera.up = cameraUpAxis;
+// camera.position.copy(cameraInitialPosition);
+// camera.lookAt(cameraPointToLookAt);
+
 /**
  * ====== TASK 2 ======
  * Your still seeing a red canvas. That is because we have not told Three.js to draw anything to the screen yet. Lets
