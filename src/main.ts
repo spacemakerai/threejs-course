@@ -389,7 +389,7 @@ const sensibleCameraPosition = new Vector3(GRID_CENTER.x, GRID_CENTER.y - 70, 80
 
 canvas.addEventListener("mouseup", onmouseup);
 function onmouseup(event: MouseEvent) {
-  const positionInCanvas = findPositionInCanvas(event, canvas); // Canvas coordinate between (0,0) and (1,1)
+  const positionInCanvas = findPositionInCanvas(event, canvas); // Canvas coordinate between (-1,-1) and (1,1)
 
   //Your code here
 
@@ -398,12 +398,12 @@ function onmouseup(event: MouseEvent) {
 
 /**
  * Normalized device coordinate or NDC space is a screen independent display coordinate system;
- * it encompasses a square where the x and y components range from 0 to 1.
+ * it encompasses a square where the x and y components range from -1 to 1.
  *
  *  |⎻⎻⎻⎻1
  *  |    |
  *  |    |
- *  0____|
+ * -1____|
  *
  */
 
@@ -413,9 +413,9 @@ export function findPositionInCanvas(event: MouseEvent, canvas: HTMLCanvasElemen
   return new Vector2(x, y);
 }
 
-function worldCoordinatesToGridIndex(screenCoordinates: Vector3) {
-  const x = Math.floor(screenCoordinates.x / CELL_SIZE.x);
-  const y = Math.floor(screenCoordinates.y / CELL_SIZE.y);
+function worldCoordinatesToGridIndex(worldCoordinates: Vector3) {
+  const x = Math.floor(worldCoordinates.x / CELL_SIZE.x);
+  const y = Math.floor(worldCoordinates.y / CELL_SIZE.y);
   return { x, y };
 }
 

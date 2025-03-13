@@ -3,7 +3,6 @@ import Grid from "../Grid";
 import { IGridMesh } from "./GridMesh";
 import { CELL_SIZE, GRID_CELL_COUNT } from "../constants";
 import * as THREE from "three";
-import { floor } from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 
 export const BOX_MATERIAL = new MeshLambertMaterial({
   side: FrontSide,
