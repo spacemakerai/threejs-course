@@ -226,7 +226,7 @@ scene.add(ambientLight);
 
 /**
  * ====== TASK 10 ======
- * Let's start building Spacemaker light version!
+ * Let's start building Forma light version!
  *
  * Imagine we have a grid that has n x m cells, where each cell represents a spot where a building can be placed:
  *
@@ -264,7 +264,7 @@ scene.add(groundMesh);
 /**
  * ====== TASK 10b ======
  *
- * For our Spacemaker light application, we want everything to be positioned in the positive quadrant of the coordinate
+ * For our Forma light application, we want everything to be positioned in the positive quadrant of the coordinate
  * system.
  *
  * The default position of the plane is in the center of the plane. We therefor need to translate the plane 50% of the

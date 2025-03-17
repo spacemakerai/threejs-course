@@ -1,6 +1,6 @@
 # Introduction to three.js
 
-![Spacemaker three logo](public/spacemakerthree.jpg)
+![Adsk three logo](public/adskthree.jpg)
 
 ## Getting started
 
