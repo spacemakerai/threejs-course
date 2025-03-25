@@ -43,7 +43,7 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
 /**
  * ====== TASK 1 ======
  *
- * The Scene contain all object you want to be rendered. This is where you place objects, lights and cameras.
+ * The Scene contains all object you want to render. This is where you place objects, lights and cameras.
  * Let's set up one up!
  *
  * Task:
@@ -61,7 +61,7 @@ const canvas: HTMLCanvasElement = document.getElementById("app")! as HTMLCanvasE
  *
  * */
 
-// Use these values when creating the camera, pass them in as parameters when you do new PerspectiveCamera()
+// Use these values when creating the camera, pass them in as parameters when you call new PerspectiveCamera()
 const fov = 75;
 const aspectRatio = window.innerWidth / window.innerHeight;
 const frustumNearPlane = 0.1;
