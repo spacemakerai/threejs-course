@@ -14,17 +14,17 @@ You will need the following installed:
 ### Running the code
 
 1. Install node (see above)
-2. Install yarn: `sudo npm install --global yarn`
+2. Install pnpm: `sudo npm install --global pnpm`
 3. Download the repository, either by `git clone https://github.com/spacemakerai/threejs-course.git` or by downloading the ZIP.
-4. In a terminal, navigate to the downloaded folder and run `yarn install` or `npm install`
-5. To run the code and make it listen to changes, run `yarn dev` or `npm run dev`
+4. In a terminal, navigate to the downloaded folder and run `pnpm install`
+5. To run the code and make it listen to changes, run `pnpm dev`
 
 Open the URL that is printed to your terminal to open the webpage.
 If you're seeing a completely red canvas, you're set to begin!
 
 ## Getting started (alternative using GitHub Codespaces)
 
-An alternative to the steps above, which require you to install git/node/yarn locally on your machine, is to simply run the tutorial in the browser using [GitHub Codespaces](https://github.com/features/codespaces). This lets you access a VS Code editor in the browser, while node, yarn etc. run in a virtual machine hosted by GitHub.
+An alternative to the steps above, which require you to install git/node/pnpm locally on your machine, is to simply run the tutorial in the browser using [GitHub Codespaces](https://github.com/features/codespaces). This lets you access a VS Code editor in the browser, while node, pnpm etc. run in a virtual machine hosted by GitHub.
 
 ### Prerequisites
 
@@ -37,7 +37,7 @@ An alternative to the steps above, which require you to install git/node/yarn lo
 3. Click the "Codespaces" tab
 4. Click "Create codespace on master". VS Code will open in a new tab
 5. Wait for the codespace to start (takes up to a minute)
-6. In the terminal within VS Code in the browser, run `yarn` and then `yarn dev`
+6. In the terminal within VS Code in the browser, run `pnpm install` and then `pnpm dev`
 7. A popup appears in the lower-right corner with the message "Your application running on port 5173 is available"
 8. Click "Open in Browser". You should expect to see a red canvas in a new tab
 
